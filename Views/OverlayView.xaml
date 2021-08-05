@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="ImageEdit.Views.OverlayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ImageEdit.Views"
+             xmlns:models="clr-namespace:ImageEdit.Models"
+             xmlns:viewModels="clr-namespace:ImageEdit.ViewModels"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:helpers="clr-namespace:ImageEdit.Helpers"
+             xmlns:controls="clr-namespace:ImageEdit.Controls"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModels:OverlayViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <local:OverlaySelector x:Key="Selector"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisible"/>
+        <local:NullToVisibilityConverter x:Key="NullToVisible"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Resources>
+    <Canvas>
+        <ItemsControl x:Name="Texts" ItemsSource="{Binding OverlayStore.Overlays}" ItemTemplateSelector="{StaticResource Selector}">
+            <ItemsControl.Resources>
+                <DataTemplate  x:Key="Text" DataType="{x:Type models:TextOverlay}">
+                    <Grid Opacity="{Binding Opacity}">
+                        <Rectangle Fill="{Binding Background}" RadiusX="{Binding Radius}" RadiusY="{Binding Radius}"/>
+                        <TextBox Text="{Binding Text}" Width="{Binding Rect.Width}" Height="{Binding Rect.Height}" GotKeyboardFocus="TextBox_GotKeyboardFocus" LostFocus="TextBox_LostFocus"
+                                 FontWeight="{Binding FontWeight}"
+                                 FontFamily="{Binding FontFamily}" 
+                                 Foreground="{Binding Foreground}" 
+                                 FontSize="{Binding FontSize}"
+                                 Background="Transparent"
+                                 BorderThickness="1"
+                                 TextAlignment="{Binding Alignment}" 
+                                 VerticalContentAlignment="Center">
+                        </TextBox>
+                    </Grid>
+                </DataTemplate>
+                <DataTemplate  x:Key="Image" DataType="{x:Type models:ImageOverlay}">
+                    <Grid x:Name="Grid" Width="{Binding Rect.Width}" Height="{Binding Rect.Height}" MouseDown="Grid_MouseDown" Focusable="True">
+                        <Image Stretch="Fill" Source="{Binding Source}"/>
+                        <Border>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid}" Value="True">
+                                            <Setter Property="BorderBrush" Value="CornflowerBlue"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid}" Value="False">
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.Resources>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding Rect.X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Rect.Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+        <Rectangle Visibility="{Binding EditStore.Instance.IsPressed, Converter={StaticResource BoolToVisible}}" StrokeThickness="{Binding ImageStore.ZoomService.OverlayThickness}" Stroke="CornflowerBlue" StrokeDashArray="1 2" Canvas.Left="{Binding EditStore.Rect.X}" Canvas.Top="{Binding EditStore.Rect.Y}" Width="{Binding EditStore.Rect.Width}" Height="{Binding EditStore.Rect.Height}"/>
+    </Canvas>
+</UserControl>

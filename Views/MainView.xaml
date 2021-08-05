@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="ImageEdit.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ImageEdit.Views"
+             xmlns:viewModels="clr-namespace:ImageEdit.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModels:MainViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <local:NullToEnableConverter x:Key="NullToEnableConverter"/>
+        <Style TargetType="Grid">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid IsEnabled="{Binding ImageStore.Source, Converter={StaticResource NullToEnableConverter}}">
+        <Border BorderBrush="Gray" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid ClipToBounds="True" Drop="Grid_Drop" AllowDrop="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                      Focusable="True"
+                      MouseMove="Grid_MouseMove"
+                      MouseDown="Grid_MouseDown"
+                      MouseUp="Grid_MouseUp"
+                      MouseLeave="Grid_MouseLeave"
+                      MouseWheel="Grid_MouseWheel"
+                      KeyDown="Grid_KeyDown">
+
+                    <Grid Panel.ZIndex="{Binding EditStore.IsNone}">
+                        <Canvas x:Name="Image">
+                            <Canvas.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="{Binding ImageStore.ZoomService.Scale}" ScaleY="{Binding ImageStore.ZoomService.Scale}"/>
+                                    <TranslateTransform X="{Binding ImageStore.ZoomService.TranslateX}" Y="{Binding ImageStore.ZoomService.TranslateY}"/>
+                                </TransformGroup>
+                            </Canvas.RenderTransform>
+                            <local:ImageView/>
+                        </Canvas>
+                        <Canvas x:Name="Overlay" Panel.ZIndex="{Binding EditStore.IsNone}">
+                            <Canvas.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="{Binding ImageStore.ZoomService.Scale}" ScaleY="{Binding ImageStore.ZoomService.Scale}"/>
+                                    <TranslateTransform X="{Binding ImageStore.ZoomService.TranslateX}" Y="{Binding ImageStore.ZoomService.TranslateY}"/>
+                                </TransformGroup>
+                            </Canvas.RenderTransform>
+                            <local:OverlayView/>
+                        </Canvas>
+                        <local:ImageControlView/>
+                    </Grid>
+                    <Grid Panel.ZIndex="{Binding OverlayStore.IsTextSelected}">
+                        <local:TextView/>
+                    </Grid>
+                    <Grid Panel.ZIndex="{Binding OverlayStore.IsSelected}">
+                        <local:ResizeView/>
+                    </Grid>
+                </Grid>
+                <Border Grid.Column="1" BorderThickness="1 0 0 0" BorderBrush="Gray"/>
+                <local:ControlView Grid.Column="2" Background="Gray"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

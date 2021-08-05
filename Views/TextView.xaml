@@ -1,0 +1,96 @@
+﻿<UserControl x:Class="ImageEdit.Views.TextView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:ImageEdit.Controls"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:viewModels="clr-namespace:ImageEdit.ViewModels"
+             xmlns:local="clr-namespace:ImageEdit.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModels:TextViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisible"/>
+        <Style TargetType="RadioButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="CornflowerBlue"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="MenuItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter Content="{TemplateBinding Header}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter Property="Background"  Value="Transparent"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Visibility="{Binding OverlayStore.IsTextSelected, Converter={StaticResource BoolToVisible}}" Margin="{Binding Margin}" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Menu Opacity="0.75" BorderBrush="Gray" BorderThickness="1">
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+                <UniformGrid Columns="2" Margin="4">
+                    <TextBlock Text="크기"/>
+                    <controls:NumericButton Value="{Binding OverlayStore.Selected.FontSize}" Min="1" Max="256"/>
+                    <TextBlock Text="굵게"/>
+                    <ToggleButton IsChecked="{Binding OverlayStore.Selected.IsBold}" BorderBrush="Transparent" Background="Transparent">
+                        <fa:FontAwesome Icon="Bold" FontSize="20"/>
+                    </ToggleButton>
+                    <TextBlock Text="글꼴"/>
+                    <ComboBox SelectedItem="{Binding OverlayStore.Selected.FontFamily}" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}"/>
+                    <TextBlock Text="정렬"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <RadioButton IsChecked="{Binding OverlayStore.Selected.IsAlignLeft}" Margin="4 0">
+                            <fa:FontAwesome Icon="AlignLeft" FontSize="20"/>
+                        </RadioButton>
+                        <RadioButton IsChecked="{Binding OverlayStore.Selected.IsAlignCenter}" Margin="4 0">
+                            <fa:FontAwesome Icon="AlignCenter" FontSize="20"/>
+                        </RadioButton>
+                        <RadioButton IsChecked="{Binding OverlayStore.Selected.IsAlignRight}" Margin="4 0">
+                            <fa:FontAwesome Icon="AlignRight" FontSize="20"/>
+                        </RadioButton>
+                    </StackPanel>
+                    <TextBlock Text="글자"/>
+                    <xctk:ColorPicker SelectedColor="{Binding OverlayStore.Selected.Foreground}"/>
+                    <TextBlock Text="배경"/>
+                    <xctk:ColorPicker SelectedColor="{Binding OverlayStore.Selected.Background}"/>
+                    <TextBlock Text="투명도"/>
+                    <controls:NumericButton Value="{Binding OverlayStore.Selected.OpacityPercent}" Min="0" Max="100"/>
+                    <TextBlock Text="둥글게"/>
+                    <controls:NumericButton Value="{Binding OverlayStore.Selected.Radius}" Min="0" Max="1000"/>
+                </UniformGrid>
+            </StackPanel>
+        </Menu>
+    </Grid>
+</UserControl>

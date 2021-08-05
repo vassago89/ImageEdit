@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="ImageEdit.Views.ControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ImageEdit.Views"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:viewModels="clr-namespace:ImageEdit.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModels:ControlViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="RadioButton">
+                <Style.Setters>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="Margin" Value="2"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RadioButton">
+                                <Border TextBlock.Foreground="{TemplateBinding Foreground}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Foreground" Value="CornflowerBlue"/>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="0.5"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style.Setters>
+            </Style>
+        </Grid.Resources>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <StackPanel>
+                    <RadioButton ToolTip="편집" IsChecked="{Binding EditStore.IsNone}" Focusable="False">
+                        <fa:FontAwesome Icon="Edit"/>
+                    </RadioButton>
+                    <RadioButton ToolTip="텍스트" IsChecked="{Binding EditStore.IsText}" Focusable="False">
+                        <fa:FontAwesome Icon="Comment"/>
+                    </RadioButton>
+                </StackPanel>
+                <Border BorderBrush="Black" BorderThickness="1" Margin="0 4"/>
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="fa:FontAwesome">
+                            <Setter Property="FontSize" Value="32"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="Opacity" Value="1"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="CornflowerBlue"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="False">
+                                    <Setter Property="Foreground" Value="Black"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Command="{Binding UndoCommand}" ToolTip="뒤로" IsEnabled="{Binding EditStore.CommandStack.CanUndo}">
+                        <fa:FontAwesome Icon="Undo"/>
+                    </Button>
+                    <Button Command="{Binding RedoCommand}" ToolTip="앞으로" IsEnabled="{Binding EditStore.CommandStack.CanRedo}">
+                        <fa:FontAwesome Icon="Repeat"/>
+                    </Button>
+                    <Button Command="{Binding RemoveCommand}" ToolTip="삭제" IsEnabled="{Binding OverlayStore.IsSelected}">
+                        <fa:FontAwesome Icon="Remove"/>
+                    </Button>
+                </StackPanel>
+                <Border BorderBrush="Black" BorderThickness="1" Margin="0 4"/>
+                <StackPanel>
+                    <Button Command="{Binding ZoomInCommand}" ToolTip="확대">
+                        <fa:FontAwesome Icon="SearchPlus"/>
+                    </Button>
+                    <Button Command="{Binding ZoomOutCommand}" ToolTip="축소">
+                        <fa:FontAwesome Icon="SearchMinus"/>
+                    </Button>
+                    <Button Command="{Binding ZoomFitCommand}" ToolTip="맞춤">
+                        <fa:FontAwesome Icon="Search"/>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
