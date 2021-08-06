@@ -34,6 +34,19 @@ namespace ImageEdit.Views
         }
     }
 
+    class BoolToVisibleHideConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (bool)value ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     /// <summary>
     /// MainView.xaml에 대한 상호 작용 논리
     /// </summary>
@@ -94,11 +107,11 @@ namespace ImageEdit.Views
 
                     rect.Intersect(sourceRect);
 
+                    var overlay = new ImageOverlay(rect, source);
                     EditStore.Instance.CommandStack.Push(new Command<Overlay>(
-                            new ImageOverlay(rect, source),
+                            overlay,
                             o =>
                             {
-                                OverlayStore.Instance.Selected = o;
                                 OverlayStore.Instance.Overlays.Add(o);
                             },
                             o =>
@@ -106,6 +119,8 @@ namespace ImageEdit.Views
                                 OverlayStore.Instance.Overlays.Remove(o);
                                 OverlayStore.Instance.Selected = null;
                             }));
+
+                    OverlayStore.Instance.Selected = overlay;
                 }
                 catch (Exception exception)
                 {
@@ -141,6 +156,9 @@ namespace ImageEdit.Views
                     _isPressed = true;
                     _translate = new Point(ImageStore.Instance.ZoomService.TranslateX, ImageStore.Instance.ZoomService.TranslateY);
                     _pos = controlPos;
+                    break;
+                case MouseButton.Left:
+                    
                     break;
             }
         }
@@ -215,8 +233,11 @@ namespace ImageEdit.Views
                         },
                         o =>
                         {
+                            OverlayStore.Instance.Selected = null;
                             OverlayStore.Instance.Overlays.Remove(o);
                         }));
+
+                OverlayStore.Instance.Selected = overlay;
             }
             else if (e.Key == Key.R)
             {

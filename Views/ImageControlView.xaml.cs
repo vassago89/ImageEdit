@@ -35,51 +35,46 @@ namespace ImageEdit.Views
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-            if (EditStore.Instance.IsPressed == false)
-                return;
-
             var canvasPos = e.GetPosition(ImageStore.Instance.Image);
 
-            switch (EditStore.Instance.EditMode)
+            EditStore.Instance.Rect = Rect.Empty;
+
+            foreach (var overlay in OverlayStore.Instance.Overlays)
             {
-                case Enums.EditMode.None:
+                if (overlay.Rect.Contains(canvasPos))
+                {
+                    EditStore.Instance.Rect = overlay.Rect;
                     break;
-                case Enums.EditMode.Text:
-                    var sourceRect = new Rect(0, 0, ImageStore.Instance.Source.PixelWidth, ImageStore.Instance.Source.PixelHeight);
-                    var rect = new Rect(
-                        Math.Min(canvasPos.X, _rectPos.X),
-                        Math.Min(canvasPos.Y, _rectPos.Y),
-                        Math.Abs(canvasPos.X - _rectPos.X),
-                        Math.Abs(canvasPos.Y - _rectPos.Y));
-
-                    rect.Intersect(sourceRect);
-
-                    EditStore.Instance.Rect = rect;
-                    break;
+                }
             }
         }
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (EditStore.Instance.Rect == null)
+                return;
+
+            var canvasPos = e.GetPosition(ImageStore.Instance.Image);
+
             switch (e.ChangedButton)
             {
                 case MouseButton.Left:
-                    switch (EditStore.Instance.EditMode)
+                    foreach (var overlay in OverlayStore.Instance.Overlays)
                     {
-                        case Enums.EditMode.None:
-                            OverlayStore.Instance.Selected = null;
-                            break;
-                        case Enums.EditMode.Text:
-                            _rectPos = e.GetPosition(ImageStore.Instance.Image);
-                            if (_rectPos.X < 0 || _rectPos.Y < 0
-                                || _rectPos.X >= ImageStore.Instance.Source.PixelWidth
-                                || _rectPos.Y >= ImageStore.Instance.Source.PixelHeight)
-                                return;
-
-                            EditStore.Instance.IsPressed = true;
-                            EditStore.Instance.Rect = new Rect(_rectPos.X, _rectPos.Y, 1, 1);
-                            break;
+                        if (overlay.Rect.Contains(canvasPos))
+                        {
+                            OverlayStore.Instance.Selected = overlay;
+                            if (overlay is TextOverlay)
+                            {
+                                var text = overlay as TextOverlay;
+                                text.TextBox?.Focus();
+                            }
+                            return;
+                        }
                     }
+
+                    OverlayStore.Instance.Selected = null;
+
                     break;
             }
         }

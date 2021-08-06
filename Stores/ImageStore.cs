@@ -38,6 +38,7 @@ namespace ImageEdit.Stores
         public Canvas Overlay { get; private set; }
 
         private Mat _mat;
+        public Mat Mat => _mat;
 
         public void Set(Mat mat)
         {

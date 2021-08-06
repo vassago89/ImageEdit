@@ -44,12 +44,15 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <StackPanel>
-                    <RadioButton ToolTip="편집" IsChecked="{Binding EditStore.IsNone}" Focusable="False">
-                        <fa:FontAwesome Icon="Edit"/>
+                    <RadioButton ToolTip="선택" IsChecked="{Binding EditStore.IsNone}" Focusable="False">
+                        <fa:FontAwesome Icon="Arrows"/>
                     </RadioButton>
-                    <RadioButton ToolTip="텍스트" IsChecked="{Binding EditStore.IsText}" Focusable="False">
+                    <Button ToolTip="텍스트" Command="{Binding TextCommand}" Focusable="False">
                         <fa:FontAwesome Icon="Comment"/>
-                    </RadioButton>
+                    </Button>
+                    <!--<Button ToolTip="모자이크" Focusable="False" Command="{Binding MosaicCommand}">
+                        <fa:FontAwesome Icon="Comment"/>
+                    </Button>-->
                 </StackPanel>
                 <Border BorderBrush="Black" BorderThickness="1" Margin="0 4"/>
                 <StackPanel>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ImageEdit.ViewModels
 {
@@ -23,6 +24,8 @@ namespace ImageEdit.ViewModels
         public RelayCommand RedoCommand { get; }
 
         public RelayCommand RemoveCommand { get; }
+        public RelayCommand TextCommand { get; }
+        public RelayCommand MosaicCommand { get; }
 
         public ControlViewModel()
         {
@@ -57,6 +60,33 @@ namespace ImageEdit.ViewModels
             RedoCommand = new RelayCommand(() =>
             {
                 EditStore.CommandStack.Redo();
+            });
+
+            TextCommand = new RelayCommand(() =>
+            {
+                var sourceRect = new Rect(0, 0, ImageStore.Instance.Source.PixelWidth, ImageStore.Instance.Source.PixelHeight);
+                var textRect = new Rect(sourceRect.Width / 2 - 50, sourceRect.Height / 2 - 24, 100, 48);
+                textRect.Intersect(sourceRect);
+                
+                var overlay = new TextOverlay(textRect);
+                EditStore.CommandStack.Push(new Command<TextOverlay>(
+                    overlay,
+                    o =>
+                    {
+                        OverlayStore.Instance.Overlays.Add(overlay);
+                    },
+                    o =>
+                    {
+                        OverlayStore.Instance.Overlays.Remove(overlay);
+                        OverlayStore.Selected = null;
+                    }));
+
+                OverlayStore.Instance.Selected = overlay;
+            });
+
+            MosaicCommand = new RelayCommand(() =>
+            {
+                Algorithms.Algorithms.Mosaic(ImageStore.Instance.Mat);
             });
         }
     }

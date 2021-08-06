@@ -45,7 +45,7 @@ namespace ImageEdit.Views
     public partial class ResizeView : UserControl
     {
         private Direction _direction;
-
+        private Point _pos;
         public ResizeView()
         {
             InitializeComponent();
@@ -97,8 +97,8 @@ namespace ImageEdit.Views
                     case Direction.Move:
                         var temp = new Rect(leftTop, rightBottom);
                         temp.Offset(
-                            pos.X - OverlayStore.Instance.Selected.Translate.X,
-                            pos.Y - OverlayStore.Instance.Selected.Translate.Y);
+                            pos.X - _pos.X,
+                            pos.Y - _pos.Y);
                         
                         if (temp.Left < 0)
                             temp.Offset(-temp.Left, 0);
@@ -170,6 +170,7 @@ namespace ImageEdit.Views
 
             if (_direction != Direction.None)
             {
+                _pos = pos;
                 Border.Background = Brushes.Transparent;
                 EditStore.Instance.Rect = OverlayStore.Instance.Selected.Rect;
                 EditStore.Instance.IsPressed = true;
@@ -178,7 +179,7 @@ namespace ImageEdit.Views
             
         private Direction GetDirection(Point pos)
         {
-            if (IsContain(pos, OverlayStore.Instance.Selected.Translate))
+            if (OverlayStore.Instance.Selected.Rect.Contains(pos))
                 return Direction.Move;
             else if (IsContain(pos, OverlayStore.Instance.Selected.TopLeft))
                 return Direction.TopLeft;

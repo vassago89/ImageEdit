@@ -45,6 +45,13 @@ namespace ImageEdit.Stores
             private set => SetProperty(ref _isSelected, value);
         }
 
+        private bool _isDeselected;
+        public bool IsDeselected
+        {
+            get => _isDeselected;
+            private set => SetProperty(ref _isDeselected, value);
+        }
+
         private Overlay _selected;
         public Overlay Selected
         {
@@ -57,6 +64,7 @@ namespace ImageEdit.Stores
                 SetProperty(ref _selected, value);
 
                 IsSelected = _selected != null;
+                IsDeselected = !IsSelected;
                 IsTextSelected = _selected != null && _selected is TextOverlay;
 
                 if (_selected != null)

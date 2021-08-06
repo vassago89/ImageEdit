@@ -44,52 +44,51 @@ namespace ImageEdit.Views
     {
         public OverlayView()
         {
-            //OverlayStore.Instance.Overlays.CollectionChanged += Texts_CollectionChanged;
+            OverlayStore.Instance.Overlays.CollectionChanged += CollectionChanged;
             InitializeComponent();
         }
 
-        //private void Texts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems == null)
+                return;
+
+            if (e.NewItems[0] is ImageOverlay)
+                return;
+
+            var overlay = e.NewItems[0] as TextOverlay;
+            if (overlay.TextBox != null)
+                return;
+
+            Task.Run(() =>
+            {
+                TextBox textBox = null;
+                while (textBox == null)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var obj = Texts.ItemContainerGenerator.ContainerFromIndex(0);
+                        if (e.NewItems.Count > 0)
+                        {
+                            textBox = Texts.ItemContainerGenerator.ContainerFromIndex(e.NewStartingIndex).FindVisualChild<TextBox>();
+                            textBox?.Focus();
+
+                            overlay.TextBox = textBox;
+                        }
+                    });
+                }
+            });
+        }
+
+        //private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         //{
-        //    if (e.NewItems == null)
-        //        return;
-
-        //    if (e.NewItems[0] is ImageOverlay)
-        //        return;
-
-        //    Task.Run(() =>
-        //    {
-        //        TextBox textBox = null;
-        //        while (textBox == null)
-        //        {
-        //            Dispatcher.Invoke(() =>
-        //            {
-        //                var obj = Texts.ItemContainerGenerator.ContainerFromIndex(0);
-        //                if (e.NewItems.Count > 0)
-        //                {
-        //                    textBox = Texts.ItemContainerGenerator.ContainerFromIndex(e.NewStartingIndex).FindVisualChild<TextBox>();
-        //                    textBox?.Focus();
-        //                    //FocusManager.SetFocusedElement(this, textBox);
-        //                }
-        //            });
-        //        }
-        //    });
+        //    OverlayStore.Instance.Selected = null;
         //}
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            OverlayStore.Instance.Selected = null;
-        }
-
-        private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            OverlayStore.Instance.Selected = textBox.DataContext as Overlay;
-        }
-
-        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var grid = sender as Grid;
-            OverlayStore.Instance.Selected = grid.DataContext as Overlay;
-        }
+        //private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        //{
+        //    var textBox = sender as TextBox;
+        //    OverlayStore.Instance.Selected = textBox.DataContext as Overlay;
+        //}
     }
 }

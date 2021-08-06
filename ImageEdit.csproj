@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\Erase.cs" />
     <Compile Include="Algorithms\GrabCut.cs" />
+    <Compile Include="Algorithms\Mosaic.cs" />
     <Compile Include="Controls\NumericButton.xaml.cs">
       <DependentUpon>NumericButton.xaml</DependentUpon>
     </Compile>
@@ -172,6 +173,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Algorithms\deploy.prototxt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\res10_300x300_ssd_iter_140000.caffemodel">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

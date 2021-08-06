@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImageEdit.Algorithms
 {
-    static class Algorithms
+    static partial class Algorithms
     {
         public static Mat Erase(int centerX, int centerY, int size, Mat source)
         {

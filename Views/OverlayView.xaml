@@ -35,7 +35,9 @@
                 <DataTemplate  x:Key="Text" DataType="{x:Type models:TextOverlay}">
                     <Grid Opacity="{Binding Opacity}">
                         <Rectangle Fill="{Binding Background}" RadiusX="{Binding Radius}" RadiusY="{Binding Radius}"/>
-                        <TextBox Text="{Binding Text}" Width="{Binding Rect.Width}" Height="{Binding Rect.Height}" GotKeyboardFocus="TextBox_GotKeyboardFocus" LostFocus="TextBox_LostFocus"
+                        <TextBox Text="{Binding Text}" 
+                                 Width="{Binding Rect.Width}" 
+                                 Height="{Binding Rect.Height}"
                                  FontWeight="{Binding FontWeight}"
                                  FontFamily="{Binding FontFamily}" 
                                  Foreground="{Binding Foreground}" 
@@ -48,23 +50,8 @@
                     </Grid>
                 </DataTemplate>
                 <DataTemplate  x:Key="Image" DataType="{x:Type models:ImageOverlay}">
-                    <Grid x:Name="Grid" Width="{Binding Rect.Width}" Height="{Binding Rect.Height}" MouseDown="Grid_MouseDown" Focusable="True">
+                    <Grid x:Name="Grid" Width="{Binding Rect.Width}" Height="{Binding Rect.Height}">
                         <Image Stretch="Fill" Source="{Binding Source}"/>
-                        <Border>
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid}" Value="True">
-                                            <Setter Property="BorderBrush" Value="CornflowerBlue"/>
-                                            <Setter Property="BorderThickness" Value="1"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid}" Value="False">
-                                            <Setter Property="BorderThickness" Value="0"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                        </Border>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.Resources>
@@ -80,6 +67,5 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
-        <Rectangle Visibility="{Binding EditStore.Instance.IsPressed, Converter={StaticResource BoolToVisible}}" StrokeThickness="{Binding ImageStore.ZoomService.OverlayThickness}" Stroke="CornflowerBlue" StrokeDashArray="1 2" Canvas.Left="{Binding EditStore.Rect.X}" Canvas.Top="{Binding EditStore.Rect.Y}" Width="{Binding EditStore.Rect.Width}" Height="{Binding EditStore.Rect.Height}"/>
     </Canvas>
 </UserControl>

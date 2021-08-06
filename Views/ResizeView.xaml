@@ -12,6 +12,7 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <local:NullToVisibilityConverter x:Key="NullToVisConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </UserControl.Resources>
     <Border x:Name="Border" MouseUp="Canvas_MouseUp" MouseMove="Canvas_MouseMove" MouseLeave="Canvas_MouseLeave" MouseDown="Canvas_MouseDown">
         <Canvas x:Name="Canvas" Visibility="{Binding OverlayStore.Selected, Converter={StaticResource NullToVisConverter}}">
@@ -21,6 +22,11 @@
                     <TranslateTransform X="{Binding ImageStore.ZoomService.TranslateX}" Y="{Binding ImageStore.ZoomService.TranslateY}"/>
                 </TransformGroup>
             </Canvas.RenderTransform>
+            <Rectangle Canvas.Left="{Binding OverlayStore.Selected.TopLeft.X}"
+                       Canvas.Top="{Binding OverlayStore.Selected.TopLeft.Y}"
+                       Width="{Binding OverlayStore.Selected.Rect.Width}"
+                       Height="{Binding OverlayStore.Selected.Rect.Height}"
+                       Fill="Transparent"/>
             <Ellipse Canvas.Left="{Binding OverlayStore.Selected.TopLeft.X}"
                      Canvas.Top="{Binding OverlayStore.Selected.TopLeft.Y}"
                      Fill="CornflowerBlue" Width="1" Height="1" RenderTransformOrigin="0.5 0.5">
@@ -65,31 +71,60 @@
             </Ellipse>
             <Ellipse Canvas.Left="{Binding OverlayStore.Selected.Bottom.X}"
                      Canvas.Top="{Binding OverlayStore.Selected.Bottom.Y}"
-                     Fill="CornflowerBlue" Width="1" Height="1" RenderTransformOrigin="0.5 0.5">
+                     Fill="CornflowerBlue" 
+                     Width="1"
+                     Height="1"
+                     RenderTransformOrigin="0.5 0.5">
                 <Ellipse.RenderTransform>
                     <ScaleTransform ScaleX="{Binding ImageStore.ZoomService.FontThickness}" ScaleY="{Binding ImageStore.ZoomService.FontThickness}"/>
                 </Ellipse.RenderTransform>
             </Ellipse>
             <Ellipse Canvas.Left="{Binding OverlayStore.Selected.BottomRight.X}"
                      Canvas.Top="{Binding OverlayStore.Selected.BottomRight.Y}"
-                     Fill="CornflowerBlue" Width="1" Height="1" RenderTransformOrigin="0.5 0.5">
+                     Fill="CornflowerBlue" 
+                     Width="1"
+                     Height="1"
+                     RenderTransformOrigin="0.5 0.5">
                 <Ellipse.RenderTransform>
                     <ScaleTransform ScaleX="{Binding ImageStore.ZoomService.FontThickness}" ScaleY="{Binding ImageStore.ZoomService.FontThickness}"/>
                 </Ellipse.RenderTransform>
             </Ellipse>
-            <Line Stroke="CornflowerBlue" 
-                  X1="{Binding OverlayStore.Selected.Top.X}" 
-                  X2="{Binding OverlayStore.Selected.Translate.X}"
-                  Y1="{Binding OverlayStore.Selected.Top.Y}"
-                  Y2="{Binding OverlayStore.Selected.Translate.Y}"
-                  StrokeThickness="{Binding ImageStore.ZoomService.OverlayThickness}"/>
-            <Ellipse Canvas.Left="{Binding OverlayStore.Selected.Translate.X}"
-                     Canvas.Top="{Binding OverlayStore.Selected.Translate.Y}"
-                     Fill="CornflowerBlue" Width="1" Height="1" RenderTransformOrigin="0.5 0.5">
-                <Ellipse.RenderTransform>
-                    <ScaleTransform ScaleX="{Binding ImageStore.ZoomService.FontThickness}" ScaleY="{Binding ImageStore.ZoomService.FontThickness}"/>
-                </Ellipse.RenderTransform>
-            </Ellipse>
+            <Rectangle Canvas.Left="{Binding OverlayStore.Selected.TopLeft.X}"
+                       Canvas.Top="{Binding OverlayStore.Selected.TopLeft.Y}"
+                       Width="{Binding OverlayStore.Selected.Rect.Width}"
+                       Height="{Binding OverlayStore.Selected.Rect.Height}"
+                       Stroke="CornflowerBlue"
+                       StrokeThickness="{Binding ImageStore.ZoomService.OverlayThickness}"
+                       StrokeDashArray="2 2"
+                       Fill="Transparent">
+                <Rectangle.Style>
+                    <Style TargetType="Rectangle">
+                        <Style.Triggers>
+                            <Trigger Property="Visibility" Value="Visible">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                To="20" 
+                                                Duration="0:0:5" 
+                                                RepeatBehavior="Forever" 
+                                                Storyboard.TargetProperty="StrokeDashOffset" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Rectangle.Style>
+            </Rectangle>
+            <Rectangle Visibility="{Binding EditStore.Instance.IsPressed, Converter={StaticResource BoolToVisConverter}}" 
+                       Canvas.Left="{Binding EditStore.Instance.Rect.X}"
+                       Canvas.Top="{Binding EditStore.Instance.Rect.Y}"
+                       Width="{Binding EditStore.Instance.Rect.Width}"
+                       Height="{Binding EditStore.Instance.Rect.Height}"
+                       Stroke="CornflowerBlue"
+                       StrokeThickness="{Binding ImageStore.ZoomService.OverlayThickness}"
+                       StrokeDashArray="1 2"/>
         </Canvas>
     </Border>
 </UserControl>
