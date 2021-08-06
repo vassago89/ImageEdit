@@ -2,6 +2,7 @@
 using ImageEdit.Helpers.Command;
 using ImageEdit.Models;
 using ImageEdit.Stores;
+using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,7 +87,18 @@ namespace ImageEdit.ViewModels
 
             MosaicCommand = new RelayCommand(() =>
             {
-                Algorithms.Algorithms.Mosaic(ImageStore.Instance.Mat);
+                var mat = ImageStore.Instance.Get().ToMat();
+                var mosaiced = Algorithms.Algorithms.Mosaic(mat);
+                
+                EditStore.CommandStack.Push(new Command(
+                    () =>
+                    {
+                        ImageStore.Instance.Set(mosaiced);
+                    },
+                    () =>
+                    {
+                        ImageStore.Instance.Set(mat);
+                    }));
             });
         }
     }

@@ -50,9 +50,9 @@
                     <Button ToolTip="텍스트" Command="{Binding TextCommand}" Focusable="False">
                         <fa:FontAwesome Icon="Comment"/>
                     </Button>
-                    <!--<Button ToolTip="모자이크" Focusable="False" Command="{Binding MosaicCommand}">
-                        <fa:FontAwesome Icon="Comment"/>
-                    </Button>-->
+                    <Button ToolTip="모자이크" Focusable="False" Command="{Binding MosaicCommand}">
+                        <fa:FontAwesome Icon="Th"/>
+                    </Button>
                 </StackPanel>
                 <Border BorderBrush="Black" BorderThickness="1" Margin="0 4"/>
                 <StackPanel>
