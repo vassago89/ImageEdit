@@ -3,6 +3,7 @@ using ImageEdit.Helpers.Command;
 using ImageEdit.Models;
 using ImageEdit.Stores;
 using OpenCvSharp.Extensions;
+using OpenCvSharp.WpfExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,17 +88,30 @@ namespace ImageEdit.ViewModels
 
             MosaicCommand = new RelayCommand(() =>
             {
-                var mat = ImageStore.Instance.Get().ToMat();
-                var mosaiced = Algorithms.Algorithms.Mosaic(mat);
-                
-                EditStore.CommandStack.Push(new Command(
-                    () =>
+                var results = Algorithms.Algorithms.Mosaic(ImageStore.Instance.Get().ToMat());
+                var overlays = new List<ImageOverlay>();
+
+                foreach (var result in results)
+                    overlays.Add(
+                        new ImageOverlay(
+                            new Rect(result.Rect.X, result.Rect.Y, result.Rect.Width, result.Rect.Height),
+                            result.Item2.ToBitmapSource()));
+
+                EditStore.CommandStack.Push(new Command<IEnumerable<ImageOverlay>>(
+                    overlays,
+                    o =>
                     {
-                        ImageStore.Instance.Set(mosaiced);
+                        foreach (var overlay in o)
+                        {
+                            OverlayStore.Instance.Overlays.Add(overlay);
+                        }
                     },
-                    () =>
+                    o =>
                     {
-                        ImageStore.Instance.Set(mat);
+                        foreach (var overlay in o)
+                        {
+                            OverlayStore.Instance.Overlays.Remove(overlay);
+                        }
                     }));
             });
         }

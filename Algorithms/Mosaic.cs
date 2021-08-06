@@ -12,20 +12,22 @@ namespace ImageEdit.Algorithms
     {
         private static Net _net = Net.ReadNetFromCaffe("Algorithms/deploy.prototxt", "Algorithms/res10_300x300_ssd_iter_140000.caffemodel");
 
-        public static Mat Mosaic(Mat source)
+        public static IEnumerable<(Rect Rect, Mat Mat)> Mosaic(Mat source)
         {
+            var results = new List<(Rect, Mat)>();
+
             var converted = new Mat();
             if (source.Channels() == 4)
                 converted = source.CvtColor(ColorConversionCodes.BGRA2BGR);
             else if (source.Channels() == 1)
                 converted = source.CvtColor(ColorConversionCodes.GRAY2BGR);
             else
-                return source;
+                return results;
 
             converted = converted.Resize(new Size(300, 300));
 
             var sourceRect = new Rect(0, 0, source.Width, source.Height);
-            
+
             using (var blob = CvDnn.BlobFromImage(converted, 1, new Size(300, 300), new Scalar(104.0, 177.0, 123.0)))
             {
                 _net.SetInput(blob);
@@ -33,35 +35,39 @@ namespace ImageEdit.Algorithms
                 {
                     using (var result = new Mat(detection.Size(2), detection.Size(3), MatType.CV_32F, detection.Ptr(0)))
                     {
-                        //result.GetArray(out float[] array);
-                        //var a = array[2];
-                        double confidence = result.At<float>(0, 2);
-                        if (confidence > 0.5)
+                        for (int i = 0; i < result.Rows; i++)
                         {
-                            var x = (int)Math.Round(result.At<float>(0, 3) * 300);
-                            var y = (int)Math.Round(result.At<float>(0, 4) * 300);
-                            var width = (int)Math.Round(result.At<float>(0, 5) * 300) - x;
-                            var height = (int)Math.Round(result.At<float>(0, 6) * 300) - y;
+                            double confidence = result.At<float>(i, 2);
+                            if (confidence > 0.2)
+                            {
+                                var x = result.At<float>(i, 3) * 300;
+                                var y = result.At<float>(i, 4) * 300;
+                                var width = result.At<float>(i, 5) * 300 - x;
+                                var height = result.At<float>(i, 6) * 300 - y;
 
-                            var xRatio = source.Width / 300;
-                            var yRatio = source.Height / 300;
+                                var xRatio = source.Width / 300.0;
+                                var yRatio = source.Height / 300.0;
 
-                            var rect = new Rect(x * xRatio, y * yRatio, width * xRatio, height * yRatio);
-                            rect.Intersect(sourceRect);
-                            if (rect.Width <= 0 || rect.Height <= 0)
-                                return source;
+                                var rect = new Rect(
+                                    (int)Math.Round(x * xRatio),
+                                    (int)Math.Round(y * yRatio),
+                                    (int)Math.Round(width * xRatio),
+                                    (int)Math.Round(height * yRatio));
+                                rect.Intersect(sourceRect);
+                                if (rect.Width <= 0 || rect.Height <= 0)
+                                    continue; ;
 
-                            var sub = source.SubMat(rect);
-                            var resized = sub.Resize(new Size(Math.Max(1, rect.Width / 5), Math.Max(1, rect.Height / 5)));
-                            resized = resized.Resize(new Size(rect.Width, rect.Height));
+                                var sub = source.Clone(rect);
+                                sub = sub.Resize(new Size(Math.Max(1, rect.Width / 5), Math.Max(1, rect.Height / 5)));
 
-                            resized.CopyTo(sub);
+                                results.Add((rect, sub.Resize(new Size(rect.Width, rect.Height))));
+                            }
                         }
                     }
                 }
             }
 
-            return source;
+            return results;
         }
     }
 }
