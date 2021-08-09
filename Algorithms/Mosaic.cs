@@ -81,6 +81,8 @@ namespace ImageEdit.Algorithms
             if (source.Channels() == 4)
                 converted = source.CvtColor(ColorConversionCodes.BGRA2BGR);
             else if (source.Channels() == 1)
+                converted = source;
+            else if (source.Channels() == 1)
                 converted = source.CvtColor(ColorConversionCodes.GRAY2BGR);
             else
                 return results;

@@ -17,6 +17,8 @@ namespace ImageEdit.Stores
 {
     class OverlayStore : BindableSingleTon<OverlayStore>
     {
+        public Action TextFocusLost { get; set; }
+
         private EventHandler _textChanged;
         public event EventHandler TextChanged 
         {
@@ -36,6 +38,18 @@ namespace ImageEdit.Stores
         {
             get => _isTextSelected;
             private set => SetProperty(ref _isTextSelected, value);
+        }
+
+        private bool _isTextFocused;
+        public bool IsTextFocused
+        {
+            get => _isTextFocused;
+            set
+            {
+                SetProperty(ref _isTextFocused, value);
+                if (_isTextFocused == false)
+                    TextFocusLost?.Invoke();
+            }
         }
 
         private bool _isSelected;

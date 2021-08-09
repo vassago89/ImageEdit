@@ -57,9 +57,6 @@ namespace ImageEdit.Views
                 return;
 
             var overlay = e.NewItems[0] as TextOverlay;
-            if (overlay.TextBox != null)
-                return;
-
             Task.Run(() =>
             {
                 TextBox textBox = null;
@@ -71,13 +68,30 @@ namespace ImageEdit.Views
                         if (e.NewItems.Count > 0)
                         {
                             textBox = Texts.ItemContainerGenerator.ContainerFromIndex(e.NewStartingIndex).FindVisualChild<TextBox>();
-                            textBox?.Focus();
+                            if (textBox == null)
+                                return;
+
+                            textBox.GotKeyboardFocus += TextBox_GotKeyboardFocus;
+                            textBox.LostFocus += TextBox_LostFocus;
+
+                            if (overlay.TextBox == null)
+                                textBox.Focus();
 
                             overlay.TextBox = textBox;
                         }
                     });
                 }
             });
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            OverlayStore.Instance.IsTextFocused = false;
+        }
+
+        private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            OverlayStore.Instance.IsTextFocused = true;
         }
 
         //private void TextBox_LostFocus(object sender, RoutedEventArgs e)

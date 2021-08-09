@@ -63,6 +63,13 @@ namespace ImageEdit.Views
             InitializeComponent();
 
             ImageStore.Instance.SetCanvas(Image, Overlay);
+
+            Grid.Focus();
+
+            OverlayStore.Instance.TextFocusLost = new Action(() =>
+            {
+                Grid.Focus();
+            });
         }
 
         private void Grid_Drop(object sender, DragEventArgs e)
@@ -143,10 +150,6 @@ namespace ImageEdit.Views
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var grid = sender as Grid;
-            if (OverlayStore.Instance.IsSelected == false)
-                Grid.Focus();
-
             var controlPos = e.GetPosition(this);
             var canvasPos = e.GetPosition(ImageStore.Instance.Image);
 

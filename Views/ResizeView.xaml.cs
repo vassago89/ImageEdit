@@ -174,6 +174,16 @@ namespace ImageEdit.Views
                 Border.Background = Brushes.Transparent;
                 EditStore.Instance.Rect = OverlayStore.Instance.Selected.Rect;
                 EditStore.Instance.IsPressed = true;
+
+                if (e.ClickCount >= 2 && OverlayStore.Instance.Selected is TextOverlay)
+                {
+                    var text = OverlayStore.Instance.Selected as TextOverlay;
+                    text.TextBox?.Focus();
+                }
+                else
+                {
+                    OverlayStore.Instance.IsTextFocused = false;
+                }
             }
         }
             

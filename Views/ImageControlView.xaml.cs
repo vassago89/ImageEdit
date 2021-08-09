@@ -64,7 +64,7 @@ namespace ImageEdit.Views
                         if (overlay.Rect.Contains(canvasPos))
                         {
                             OverlayStore.Instance.Selected = overlay;
-                            if (overlay is TextOverlay)
+                            if (e.ClickCount >= 2 && overlay is TextOverlay)
                             {
                                 var text = overlay as TextOverlay;
                                 text.TextBox?.Focus();
@@ -74,6 +74,7 @@ namespace ImageEdit.Views
                     }
 
                     OverlayStore.Instance.Selected = null;
+                    OverlayStore.Instance.IsTextFocused = false;
 
                     break;
             }
