@@ -2,18 +2,67 @@
 using OpenCvSharp.Dnn;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ImageEdit.Algorithms
 {
+    [Serializable]
+    class DectectionFaceCaffe
+    {
+        private byte[] _proto;
+        public byte[] Proto => _proto;
+
+        private byte[] _model;
+        public byte[] Model => _model;
+
+        public DectectionFaceCaffe(byte[] proto, byte[] model)
+        {
+            _proto = proto;
+            _model = model;
+        }
+    }
+
+
     static partial class Algorithms
     {
-        private static Net _net = Net.ReadNetFromCaffe("Algorithms/deploy.prototxt", "Algorithms/res10_300x300_ssd_iter_140000.caffemodel");
-        
+        private const string _faceFileName = "Algorithms/Face.bin";
+
         private static readonly int _resize = 5;
         private static readonly double _confidence = 0.2;
+
+        private static void InitilizeFace()
+        {
+            if (File.Exists("Algorithms/deploy.prototxt") && File.Exists("Algorithms/deploy.prototxt"))
+            {
+                var formatter = new BinaryFormatter();
+
+                var proto = File.ReadAllBytes("Algorithms/deploy.prototxt");
+                var model = File.ReadAllBytes("Algorithms/res10_300x300_ssd_iter_140000.caffemodel");
+                var detectionFace = new DectectionFaceCaffe(proto, model);
+
+                using (var fs = new FileStream(_faceFileName, FileMode.Create))
+                    formatter.Serialize(fs, detectionFace);
+            }
+        }
+
+        private static Net Open()
+        {
+            if (File.Exists(_faceFileName))
+            {
+                var formatter = new BinaryFormatter();
+                using (var fs = new FileStream(_faceFileName, FileMode.Open))
+                {
+                    var dectectionFaceCaffe = formatter.Deserialize(fs) as DectectionFaceCaffe;
+                    return Net.ReadNetFromCaffe(dectectionFaceCaffe.Proto, dectectionFaceCaffe.Model);
+                }
+            }
+
+            return null;
+        }
 
         public static Mat Mosaic(Mat source, Rect rect)
         {
@@ -31,11 +80,17 @@ namespace ImageEdit.Algorithms
         private static IEnumerable<Rect> GetFaceRects(Mat converted, Rect sourceRect)
         {
             var rects = new List<Rect>();
+
+            InitilizeFace();
+            var net = Open();
+            if (net == null)
+                return rects;
+
             converted = converted.Resize(new Size(300, 300));
             using (var blob = CvDnn.BlobFromImage(converted, 1, new Size(300, 300), new Scalar(104.0, 177.0, 123.0)))
             {
-                _net.SetInput(blob);
-                using (var detection = _net.Forward())
+                net.SetInput(blob);
+                using (var detection = net.Forward())
                 {
                     using (var result = new Mat(detection.Size(2), detection.Size(3), MatType.CV_32F, detection.Ptr(0)))
                     {
@@ -80,7 +135,7 @@ namespace ImageEdit.Algorithms
             var converted = new Mat();
             if (source.Channels() == 4)
                 converted = source.CvtColor(ColorConversionCodes.BGRA2BGR);
-            else if (source.Channels() == 1)
+            else if (source.Channels() == 3)
                 converted = source;
             else if (source.Channels() == 1)
                 converted = source.CvtColor(ColorConversionCodes.GRAY2BGR);
