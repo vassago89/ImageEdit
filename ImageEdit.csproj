@@ -120,6 +120,7 @@
     <Compile Include="Helpers\ZoomService.cs" />
     <Compile Include="Models\ImageOverlay.cs" />
     <Compile Include="Models\Overlay.cs" />
+    <Compile Include="Models\ResizeOverlay.cs" />
     <Compile Include="Models\TextOverlay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

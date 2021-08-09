@@ -145,7 +145,7 @@ namespace ImageEdit.Views
         {
             var grid = sender as Grid;
             if (OverlayStore.Instance.IsSelected == false)
-                grid.Focus();
+                Grid.Focus();
 
             var controlPos = e.GetPosition(this);
             var canvasPos = e.GetPosition(ImageStore.Instance.Image);
@@ -186,6 +186,28 @@ namespace ImageEdit.Views
 
         private void Grid_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Delete)
+            {
+                if (OverlayStore.Instance.Selected != null)
+                {
+                    var overlay = OverlayStore.Instance.Selected;
+                    EditStore.Instance.CommandStack.Push(new Command<Overlay>(
+                        overlay,
+                        o =>
+                        {
+                            OverlayStore.Instance.Overlays.Remove(o);
+                        },
+                        o =>
+                        {
+                            OverlayStore.Instance.Overlays.Add(o);
+                        }));
+
+                    OverlayStore.Instance.Selected = null;
+                }
+
+                return;
+            }
+
             if (Keyboard.IsKeyDown(Key.LeftCtrl) == false)
                 return;
 

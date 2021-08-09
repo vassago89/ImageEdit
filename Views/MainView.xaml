@@ -28,7 +28,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Grid ClipToBounds="True" Drop="Grid_Drop" AllowDrop="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                <Grid x:Name="Grid" ClipToBounds="True" Drop="Grid_Drop" AllowDrop="True" RenderOptions.BitmapScalingMode="HighQuality" 
                       Focusable="True"
                       MouseMove="Grid_MouseMove"
                       MouseDown="Grid_MouseDown"
@@ -55,9 +55,9 @@
                             </Canvas.RenderTransform>
                             <local:OverlayView/>
                         </Canvas>
-                        <local:ImageControlView/>
                     </Grid>
                     <Grid>
+                        <local:ImageControlView/>
                         <local:TextView/>
                         <local:ResizeView/>
                     </Grid>

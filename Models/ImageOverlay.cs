@@ -10,7 +10,12 @@ namespace ImageEdit.Models
 {
     class ImageOverlay : Overlay
     {
-        public BitmapSource Source { get; }
+        private BitmapSource _source;
+        public BitmapSource Source 
+        { 
+            get => _source;
+            set => SetProperty(ref _source, value);
+        }
 
         public ImageOverlay(Rect rect, BitmapSource source) : base(rect)
         {

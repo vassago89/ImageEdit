@@ -39,7 +39,7 @@ namespace ImageEdit.Views
 
             EditStore.Instance.Rect = Rect.Empty;
 
-            foreach (var overlay in OverlayStore.Instance.Overlays)
+            foreach (var overlay in OverlayStore.Instance.Overlays.Reverse())
             {
                 if (overlay.Rect.Contains(canvasPos))
                 {
@@ -59,7 +59,7 @@ namespace ImageEdit.Views
             switch (e.ChangedButton)
             {
                 case MouseButton.Left:
-                    foreach (var overlay in OverlayStore.Instance.Overlays)
+                    foreach (var overlay in OverlayStore.Instance.Overlays.Reverse())
                     {
                         if (overlay.Rect.Contains(canvasPos))
                         {
@@ -90,26 +90,6 @@ namespace ImageEdit.Views
                     switch (EditStore.Instance.EditMode)
                     {
                         case Enums.EditMode.None:
-                            break;
-                        case Enums.EditMode.Text:
-                            if (EditStore.Instance.Rect == null)
-                                break;
-
-                            EditStore.Instance.CommandStack.Push(new Command<Overlay>(
-                                new Models.TextOverlay(EditStore.Instance.Rect),
-                                overlay =>
-                                {
-                                    OverlayStore.Instance.Selected = overlay;
-                                    OverlayStore.Instance.Overlays.Add(overlay);
-                                },
-                                overlay =>
-                                {
-                                    OverlayStore.Instance.Overlays.Remove(overlay);
-                                    OverlayStore.Instance.Selected = null;
-                                }));
-                            
-                            EditStore.Instance.Rect = Rect.Empty;
-                            EditStore.Instance.IsNone = true;
                             break;
                     }
                     break;

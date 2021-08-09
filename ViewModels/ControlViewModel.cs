@@ -66,8 +66,10 @@ namespace ImageEdit.ViewModels
 
             TextCommand = new RelayCommand(() =>
             {
+                var size = Math.Min(ImageStore.Instance.Source.Width, ImageStore.Instance.Source.Height) / 4;
+
                 var sourceRect = new Rect(0, 0, ImageStore.Instance.Source.PixelWidth, ImageStore.Instance.Source.PixelHeight);
-                var textRect = new Rect(sourceRect.Width / 2 - 50, sourceRect.Height / 2 - 24, 100, 48);
+                var textRect = new Rect(sourceRect.Width / 2 - size / 2, sourceRect.Height / 2 - size / 2, size, size);
                 textRect.Intersect(sourceRect);
                 
                 var overlay = new TextOverlay(textRect);
@@ -88,14 +90,53 @@ namespace ImageEdit.ViewModels
 
             MosaicCommand = new RelayCommand(() =>
             {
-                var results = Algorithms.Algorithms.Mosaic(ImageStore.Instance.Get().ToMat());
+                var results = Algorithms.Algorithms.Mosaic(ImageStore.Instance.Mat);
                 var overlays = new List<ImageOverlay>();
 
                 foreach (var result in results)
-                    overlays.Add(
-                        new ImageOverlay(
+                {
+                    var overlay = new ResizeOverlay(
                             new Rect(result.Rect.X, result.Rect.Y, result.Rect.Width, result.Rect.Height),
-                            result.Item2.ToBitmapSource()));
+                            result.Item2.ToBitmapSource());
+
+                    overlay.RectChanged += (d, e) =>
+                    {
+                        overlay.Source = Algorithms.Algorithms.Mosaic(ImageStore.Instance.Mat, 
+                            new OpenCvSharp.Rect(
+                                (int)overlay.Rect.X,
+                                (int)overlay.Rect.Y,
+                                (int)overlay.Rect.Width,
+                                (int)overlay.Rect.Height)).ToBitmapSource();
+                    };
+
+                    overlays.Add(overlay);
+                }
+
+                if (results.Count() == 0)
+                {
+                    var size = Math.Min(ImageStore.Instance.Source.Width, ImageStore.Instance.Source.Height) / 4;
+                    var halfX = ImageStore.Instance.Source.Width / 2;
+                    var halfY = ImageStore.Instance.Source.Height / 2;
+                    var rect = new Rect(
+                                halfX - size / 2, halfY - size / 2, size, size);
+                    
+                    var overlay = new ResizeOverlay(
+                        rect,
+                        Algorithms.Algorithms.Mosaic(
+                            ImageStore.Instance.Mat, new OpenCvSharp.Rect((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height)).ToBitmapSource());
+
+                    overlay.RectChanged += (d, e) =>
+                    {
+                        overlay.Source = Algorithms.Algorithms.Mosaic(ImageStore.Instance.Mat,
+                            new OpenCvSharp.Rect(
+                                (int)overlay.Rect.X,
+                                (int)overlay.Rect.Y,
+                                (int)overlay.Rect.Width,
+                                (int)overlay.Rect.Height)).ToBitmapSource();
+                    };
+
+                    overlays.Add(overlay);
+                }
 
                 EditStore.CommandStack.Push(new Command<IEnumerable<ImageOverlay>>(
                     overlays,
@@ -108,11 +149,15 @@ namespace ImageEdit.ViewModels
                     },
                     o =>
                     {
+                        OverlayStore.Instance.Selected = null;
+
                         foreach (var overlay in o)
                         {
                             OverlayStore.Instance.Overlays.Remove(overlay);
                         }
                     }));
+
+                OverlayStore.Instance.Selected = overlays.Last();
             });
         }
     }

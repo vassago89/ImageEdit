@@ -42,7 +42,10 @@ namespace ImageEdit.Stores
 
         public void Set(Mat mat)
         {
+            OverlayStore.Instance.Selected = null;
             OverlayStore.Instance.Overlays.Clear();
+            EditStore.Instance.Rect = System.Windows.Rect.Empty;
+            EditStore.Instance.CommandStack.Clear();
 
             _mat = mat;
 
@@ -54,7 +57,10 @@ namespace ImageEdit.Stores
 
         public void Set(Uri url)
         {
+            OverlayStore.Instance.Selected = null;
             OverlayStore.Instance.Overlays.Clear();
+            EditStore.Instance.Rect = System.Windows.Rect.Empty;
+            EditStore.Instance.CommandStack.Clear();
 
             var source = new BitmapImage(url);
             if (source.IsDownloading)

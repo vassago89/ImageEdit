@@ -13,23 +13,24 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibleConverter"/>
     </UserControl.Resources>
-    <Canvas Background="Transparent"
-            MouseMove="Grid_MouseMove"
-            MouseDown="Grid_MouseDown"
-            MouseUp="Grid_MouseUp"
-            MouseLeave="Grid_MouseLeave">
-        <Canvas.RenderTransform>
-            <TransformGroup>
-                <ScaleTransform ScaleX="{Binding ImageStore.ZoomService.Scale}" ScaleY="{Binding ImageStore.ZoomService.Scale}"/>
-                <TranslateTransform X="{Binding ImageStore.ZoomService.TranslateX}" Y="{Binding ImageStore.ZoomService.TranslateY}"/>
-            </TransformGroup>
-        </Canvas.RenderTransform>
-        <Rectangle Canvas.Left="{Binding EditStore.Instance.Rect.X}"
-                   Canvas.Top="{Binding EditStore.Instance.Rect.Y}"
-                   Width="{Binding EditStore.Instance.Rect.Width}"
-                   Height="{Binding EditStore.Instance.Rect.Height}"
-                   Stroke="CornflowerBlue"
-                   StrokeThickness="{Binding ImageStore.ZoomService.OverlayThickness}"
-                   Visibility="{Binding OverlayStore.IsDeselected, Converter={StaticResource BoolToVisibleConverter}}"/>
-    </Canvas>
+    <Grid MouseMove="Grid_MouseMove"
+          MouseDown="Grid_MouseDown"
+          MouseUp="Grid_MouseUp"
+          MouseLeave="Grid_MouseLeave"
+          Background="Transparent">
+        <Canvas>
+            <Canvas.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="{Binding ImageStore.ZoomService.Scale}" ScaleY="{Binding ImageStore.ZoomService.Scale}"/>
+                    <TranslateTransform X="{Binding ImageStore.ZoomService.TranslateX}" Y="{Binding ImageStore.ZoomService.TranslateY}"/>
+                </TransformGroup>
+            </Canvas.RenderTransform>
+            <Rectangle Canvas.Left="{Binding EditStore.Instance.Rect.X}"
+                       Canvas.Top="{Binding EditStore.Instance.Rect.Y}"
+                       Width="{Binding EditStore.Instance.Rect.Width}"
+                       Height="{Binding EditStore.Instance.Rect.Height}"
+                       Stroke="CornflowerBlue"
+                       StrokeThickness="{Binding ImageStore.ZoomService.OverlayThickness}"/>
+        </Canvas>
+    </Grid>
 </UserControl>
