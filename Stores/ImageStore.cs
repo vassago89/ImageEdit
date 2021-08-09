@@ -125,16 +125,19 @@ namespace ImageEdit.Stores
             target.Render(visual);
         }
 
-        public System.Drawing.Bitmap Get()
+        public (System.Drawing.Bitmap All, System.Drawing.Bitmap Overlay) Get()
         {
             if (_source == null || Image == null || Overlay == null)
-                return null;
+                return (null, null);
 
-            var target = new RenderTargetBitmap((int)(_source.Width), (int)(_source.Height), _source.DpiX, _source.DpiY, PixelFormats.Pbgra32);
-            Render(target, Image, new System.Windows.Rect(0, 0, _source.Width, _source.Height));
-            Render(target, Overlay, OverlayStore.Instance.GetRegion());
+            var all = new RenderTargetBitmap((int)(_source.Width), (int)(_source.Height), _source.DpiX, _source.DpiY, PixelFormats.Pbgra32);
+            Render(all, Image, new System.Windows.Rect(0, 0, _source.Width, _source.Height));
+            Render(all, Overlay, OverlayStore.Instance.GetRegion());
 
-            return target.ToBitmap();
+            var overlay = new RenderTargetBitmap((int)(_source.Width), (int)(_source.Height), _source.DpiX, _source.DpiY, PixelFormats.Pbgra32);
+            Render(all, Overlay, OverlayStore.Instance.GetRegion());
+
+            return (all.ToBitmap(), overlay.ToBitmap());
         }
 
         public void ZoomFit(BitmapSource source = null)

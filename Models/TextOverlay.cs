@@ -42,6 +42,24 @@ namespace ImageEdit.Models
             }
         }
 
+        private bool _isUnderLine;
+        public bool IsUnderLine
+        {
+            get => _isUnderLine;
+            set
+            {
+                SetProperty(ref _isUnderLine, value);
+                TextDecoration = _isUnderLine ? TextDecorations.Underline : null;
+            }
+        }
+
+        private object _textDecoration;
+        public object TextDecoration
+        {
+            get => _textDecoration;
+            set => SetProperty(ref _textDecoration, value);
+        }
+
         private FontWeight _fontWeight;
         public FontWeight FontWeight
         {

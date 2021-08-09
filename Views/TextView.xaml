@@ -67,6 +67,10 @@
                     <ToggleButton IsChecked="{Binding OverlayStore.Selected.IsBold}" BorderBrush="Transparent" Background="Transparent">
                         <fa:FontAwesome Icon="Bold" FontSize="20"/>
                     </ToggleButton>
+                    <TextBlock Text="밑줄"/>
+                    <ToggleButton IsChecked="{Binding OverlayStore.Selected.IsUnderLine}" BorderBrush="Transparent" Background="Transparent">
+                        <fa:FontAwesome Icon="Underline" FontSize="20"/>
+                    </ToggleButton>
                     <TextBlock Text="글꼴"/>
                     <ComboBox SelectedItem="{Binding OverlayStore.Selected.FontFamily}" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}"/>
                     <TextBlock Text="정렬"/>

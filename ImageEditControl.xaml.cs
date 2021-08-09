@@ -47,7 +47,7 @@ namespace ImageEdit
             ImageStore.Instance.Set(url);
         }
 
-        public Bitmap Get()
+        public (Bitmap All, Bitmap Overlay) Get()
         {
             return ImageStore.Instance.Get();
         }

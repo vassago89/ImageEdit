@@ -38,6 +38,7 @@
                         <TextBox Text="{Binding Text}" 
                                  Width="{Binding Rect.Width}" 
                                  Height="{Binding Rect.Height}"
+                                 TextDecorations ="{Binding TextDecoration}"
                                  FontWeight="{Binding FontWeight}"
                                  FontFamily="{Binding FontFamily}" 
                                  Foreground="{Binding Foreground}" 

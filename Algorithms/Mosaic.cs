@@ -31,8 +31,8 @@ namespace ImageEdit.Algorithms
     {
         private const string _faceFileName = "Algorithms/Face.bin";
 
-        private static readonly int _resize = 5;
-        private static readonly double _confidence = 0.2;
+        private static readonly int _resize = 20;
+        private static readonly double _confidence = 0.5;
 
         private static void InitilizeFace()
         {
@@ -73,7 +73,7 @@ namespace ImageEdit.Algorithms
                 return null;
 
             var sub = source.SubMat(rect);
-            var resized = sub.Resize(new Size(Math.Max(1, source.Width / 20), Math.Max(1, source.Height / 20)));
+            var resized = sub.Resize(new Size(20, 20));
             return resized.Resize(new Size(source.Width, source.Height));
         }
 
