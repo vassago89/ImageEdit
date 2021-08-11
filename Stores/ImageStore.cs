@@ -130,12 +130,12 @@ namespace ImageEdit.Stores
             if (_source == null || Image == null || Overlay == null)
                 return null;
 
-            OverlayStore.Instance.Selected = null;
-            OverlayStore.Instance.Overlays.Clear();
-
             var bitmap = new RenderTargetBitmap((int)(_source.Width), (int)(_source.Height), _source.DpiX, _source.DpiY, PixelFormats.Pbgra32);
             Render(bitmap, Image, new System.Windows.Rect(0, 0, _source.Width, _source.Height));
             Render(bitmap, Overlay, OverlayStore.Instance.GetRegion());
+
+            OverlayStore.Instance.Selected = null;
+            OverlayStore.Instance.Overlays.Clear();
 
             return bitmap.ToBitmap();
         }
