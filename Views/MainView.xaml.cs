@@ -216,39 +216,49 @@ namespace ImageEdit.Views
 
             if (e.Key == Key.V)
             {
-                var textContains = Clipboard.ContainsText();
+                //var textContains = Clipboard.ContainsText();
                 var imageContains = Clipboard.ContainsImage();
-                    
-                if (textContains == false && imageContains == false)
+
+                //if (textContains == false && imageContains == false)
+                if (imageContains == false)
                     return;
 
                 var sourceRect = new Rect(0, 0, ImageStore.Instance.Source.PixelWidth, ImageStore.Instance.Source.PixelHeight);
                 var center = new Point(sourceRect.Width / 2, sourceRect.Height / 2);
 
-                Overlay overlay = null;
-                if (textContains)
-                {
-                    var text = Clipboard.GetText();
-                    var width = text.Length * 24;
-                    var height = 24 * 2;
-                    var rect = new Rect(center.X - width / 2, center.Y - height / 2, width, height);
-                    rect.Intersect(sourceRect);
-                    overlay = new TextOverlay(rect, text);
+                //Overlay overlay = null;
+                //if (textContains)
+                //{
+                //    var text = Clipboard.GetText();
+                //    var width = text.Length * 24;
+                //    var height = 24 * 2;
+                //    var rect = new Rect(center.X - width / 2, center.Y - height / 2, width, height);
+                //    rect.Intersect(sourceRect);
+                //    overlay = new TextOverlay(rect, text);
 
-                        
-                }
 
-                if (imageContains)
-                {
-                    var image = Clipboard.GetImage();
-                    image.Freeze();
+                //}
 
-                    var width = image.PixelWidth;
-                    var height = image.PixelHeight;
-                    var rect = new Rect(center.X - width / 2, center.Y - height / 2, width, height);
-                    rect.Intersect(sourceRect);
-                    overlay = new ImageOverlay(rect, image);
-                }
+                //if (imageContains)
+                //{
+                //    var image = Clipboard.GetImage();
+                //    image.Freeze();
+
+                //    var width = image.PixelWidth;
+                //    var height = image.PixelHeight;
+                //    var rect = new Rect(center.X - width / 2, center.Y - height / 2, width, height);
+                //    rect.Intersect(sourceRect);
+                //    overlay = new ImageOverlay(rect, image);
+                //}
+
+                var image = Clipboard.GetImage();
+                image.Freeze();
+
+                var width = image.PixelWidth;
+                var height = image.PixelHeight;
+                var rect = new Rect(center.X - width / 2, center.Y - height / 2, width, height);
+                rect.Intersect(sourceRect);
+                var overlay = new ImageOverlay(rect, image);
 
                 EditStore.Instance.CommandStack.Push(new Command<Overlay>(
                         overlay,

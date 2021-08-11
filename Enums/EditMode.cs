@@ -8,6 +8,6 @@ namespace ImageEdit.Enums
 {
     enum EditMode
     {
-        None, Text
+        None, Crop
     }
 }

@@ -140,6 +140,7 @@
     <Compile Include="Stores\ImageStore.cs" />
     <Compile Include="Stores\OverlayStore.cs" />
     <Compile Include="ViewModels\ControlViewModel.cs" />
+    <Compile Include="ViewModels\CropViewModel.cs" />
     <Compile Include="ViewModels\ImageControlViewModel.cs" />
     <Compile Include="ViewModels\ImageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -148,6 +149,9 @@
     <Compile Include="ViewModels\TextViewModel.cs" />
     <Compile Include="Views\ControlView.xaml.cs">
       <DependentUpon>ControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CropView.xaml.cs">
+      <DependentUpon>CropView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ImageControlView.xaml.cs">
       <DependentUpon>ImageControlView.xaml</DependentUpon>
@@ -195,6 +199,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>
     <Page Include="Views\ControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CropView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -28,7 +28,11 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Grid x:Name="Grid" ClipToBounds="True" Drop="Grid_Drop" AllowDrop="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                <Grid x:Name="Grid" 
+                      ClipToBounds="True" 
+                      Drop="Grid_Drop"
+                      AllowDrop="True" 
+                      RenderOptions.BitmapScalingMode="HighQuality" 
                       Focusable="True"
                       MouseMove="Grid_MouseMove"
                       MouseDown="Grid_MouseDown"
@@ -36,7 +40,10 @@
                       MouseLeave="Grid_MouseLeave"
                       MouseWheel="Grid_MouseWheel"
                       KeyDown="Grid_KeyDown">
-                    <Grid>
+                    <Grid Panel.ZIndex="{Binding EditStore.IsCrop}">
+                        <local:CropView/>
+                    </Grid>
+                    <Grid Opacity="{Binding EditStore.Opacity}">
                         <Canvas x:Name="Image">
                             <Canvas.RenderTransform>
                                 <TransformGroup>
@@ -55,8 +62,6 @@
                             </Canvas.RenderTransform>
                             <local:OverlayView/>
                         </Canvas>
-                    </Grid>
-                    <Grid>
                         <local:ImageControlView/>
                         <local:TextView/>
                         <local:ResizeView/>

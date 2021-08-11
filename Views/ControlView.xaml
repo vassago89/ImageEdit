@@ -40,12 +40,42 @@
                     </Setter>
                 </Style.Setters>
             </Style>
+            <Style TargetType="ToggleButton">
+                <Style.Setters>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="Margin" Value="2"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Border TextBlock.Foreground="{TemplateBinding Foreground}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Foreground" Value="CornflowerBlue"/>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="0.5"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style.Setters>
+            </Style>
         </Grid.Resources>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <StackPanel>
                     <RadioButton ToolTip="선택" IsChecked="{Binding EditStore.IsNone}" Focusable="False">
                         <fa:FontAwesome Icon="Arrows"/>
+                    </RadioButton>
+                    <RadioButton ToolTip="자르기" Focusable="False" IsChecked="{Binding EditStore.IsCrop}">
+                        <fa:FontAwesome Icon="Crop"/>
                     </RadioButton>
                     <Button ToolTip="텍스트" Command="{Binding TextCommand}" Focusable="False">
                         <fa:FontAwesome Icon="Comment"/>

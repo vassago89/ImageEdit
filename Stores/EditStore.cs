@@ -24,19 +24,25 @@ namespace ImageEdit.Stores
             {
                 SetProperty(ref _isNone, value);
                 if (value)
-                    EditMode = Enums.EditMode.None;
+                {
+                    EditMode = EditMode.None;
+                    Opacity = 1;
+                }
             }
         }
 
-        private bool _isText;
-        public bool IsText
+        private bool _isCrop;
+        public bool IsCrop
         {
-            get => _isText;
+            get => _isCrop;
             set
             {
-                SetProperty(ref _isText, value);
+                SetProperty(ref _isCrop, value);
                 if (value)
-                    EditMode = Enums.EditMode.Text;
+                {
+                    EditMode = EditMode.Crop;
+                    Opacity = 0.25;
+                }
             }
         }
 
@@ -47,11 +53,36 @@ namespace ImageEdit.Stores
             set => SetProperty(ref _editMode, value);
         }
 
+        private double _opacity;
+        public double Opacity
+        {
+            get => _opacity;
+            set => SetProperty(ref _opacity, value);
+        }
+
         private Rect _rect;
         public Rect Rect
         {
             get => _rect;
             set => SetProperty(ref _rect, value);
+        }
+
+        private Rect _cropRect;
+        public Rect CropRect
+        {
+            get => _cropRect;
+            set
+            {
+                SetProperty(ref _cropRect, value);
+                InvertCropPoint = new Point(-_cropRect.X, -_cropRect.Y);
+            }
+        }
+
+        private Point _invertCropPoint;
+        public Point InvertCropPoint
+        {
+            get => _invertCropPoint;
+            set => SetProperty(ref _invertCropPoint, value);
         }
 
         private bool _isPressed;
