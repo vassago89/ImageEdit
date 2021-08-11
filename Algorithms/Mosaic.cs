@@ -34,6 +34,8 @@ namespace ImageEdit.Algorithms
         private static readonly int _resize = 20;
         private static readonly double _confidence = 0.5;
 
+        private static Net _net;
+
         private static void InitilizeFace()
         {
             if (File.Exists("Algorithms/deploy.prototxt") && File.Exists("Algorithms/deploy.prototxt"))
@@ -82,15 +84,20 @@ namespace ImageEdit.Algorithms
             var rects = new List<Rect>();
 
             InitilizeFace();
-            var net = Open();
-            if (net == null)
-                return rects;
+            if (_net == null)
+            {
+                _net = Open();
+
+                if (_net == null)
+                    return rects;
+            }
+                
 
             converted = converted.Resize(new Size(300, 300));
             using (var blob = CvDnn.BlobFromImage(converted, 1, new Size(300, 300), new Scalar(104.0, 177.0, 123.0)))
             {
-                net.SetInput(blob);
-                using (var detection = net.Forward())
+                _net.SetInput(blob);
+                using (var detection = _net.Forward())
                 {
                     using (var result = new Mat(detection.Size(2), detection.Size(3), MatType.CV_32F, detection.Ptr(0)))
                     {
