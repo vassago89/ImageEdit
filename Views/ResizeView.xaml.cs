@@ -85,7 +85,7 @@ namespace ImageEdit.Views
             }
             else
             {
-                if (ImageStore.Instance.Source == null)
+                if (ImageStore.Instance.Source == null || OverlayStore.Instance.Selected == null)
                     return;
 
                 var rect = OverlayStore.Instance.Selected.Rect;
@@ -158,12 +158,14 @@ namespace ImageEdit.Views
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Arrow;
-            //_direction = Direction.None;
-            //Border.Background = null;
-        }
+            _direction = Direction.None;
+            Border.Background = null;        }
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (OverlayStore.Instance.Selected == null)
+                return;
+
             var pos = e.GetPosition(Canvas);
 
             _direction = GetDirection(pos);
@@ -223,16 +225,15 @@ namespace ImageEdit.Views
             Mouse.OverrideCursor = Cursors.Arrow;
             _direction = Direction.None;
             Border.Background = null;
-            
-            if (EditStore.Instance.IsPressed)
+
+            if (EditStore.Instance.IsPressed && OverlayStore.Instance.Selected != null) 
             {
                 EditStore.Instance.IsPressed = false;
                 var prevRect = OverlayStore.Instance.Selected.Rect;
                 var nextRect = EditStore.Instance.Rect;
                 var command = new Command<Overlay>(
                     OverlayStore.Instance.Selected,
-                    overlay =>
-                    {
+                    overlay =>                    {
                         overlay.Rect = nextRect;
                     },
                     overlay =>

@@ -56,6 +56,7 @@ namespace ImageEdit.Views
         private void Grid_MouseLeave(object sender, MouseEventArgs e)
         {
             _isPressed = false;
+            EditStore.Instance.IsNone = true;
         }
 
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e)

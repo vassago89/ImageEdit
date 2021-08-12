@@ -136,7 +136,7 @@ namespace ImageEdit.Stores
 
             OverlayStore.Instance.Selected = null;
             OverlayStore.Instance.Overlays.Clear();
-
+            
             return bitmap.ToBitmap();
         }
 

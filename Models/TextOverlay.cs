@@ -49,7 +49,7 @@ namespace ImageEdit.Models
             set
             {
                 SetProperty(ref _isUnderLine, value);
-                TextDecoration = _isUnderLine ? TextDecorations.Underline : null;
+                TextDecoration = _isUnderLine ? TextDecorations.Baseline : null;
             }
         }
 
@@ -141,6 +141,7 @@ namespace ImageEdit.Models
             FontSize = 32;
             FontFamily = Fonts.SystemFontFamilies.First(b => b.Source == "Arial");
             FontWeight = FontWeights.Normal;
+            TextDecoration = null;
         }
     }
 }
