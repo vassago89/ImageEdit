@@ -44,11 +44,11 @@ namespace ImageEdit.Views
     {
         public OverlayView()
         {
-            OverlayStore.Instance.Overlays.CollectionChanged += CollectionChanged;
+            OverlayStore.Instance.OverlayChanged = OverlayChanged;
             InitializeComponent();
         }
 
-        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OverlayChanged(NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems == null)
                 return;
@@ -64,7 +64,6 @@ namespace ImageEdit.Views
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        var obj = Texts.ItemContainerGenerator.ContainerFromIndex(0);
                         if (e.NewItems.Count > 0)
                         {
                             textBox = Texts.ItemContainerGenerator.ContainerFromIndex(e.NewStartingIndex).FindVisualChild<TextBox>();

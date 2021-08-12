@@ -4,6 +4,7 @@ using OpenCvSharp.WpfExtensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace ImageEdit.Stores
     class OverlayStore : BindableSingleTon<OverlayStore>
     {
         public Action TextFocusLost { get; set; }
+        public Action<NotifyCollectionChangedEventArgs> OverlayChanged { get; set; }
 
         private EventHandler _textChanged;
         public event EventHandler TextChanged 
@@ -92,6 +94,13 @@ namespace ImageEdit.Stores
         {
             _overlays = new ObservableCollection<Overlay>();
             BindingOperations.EnableCollectionSynchronization(_overlays, new object());
+
+            _overlays.CollectionChanged += _overlays_CollectionChanged;
+        }
+
+        private void _overlays_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            OverlayChanged?.Invoke(e);
         }
 
         public void ZoomChange() => _textChanged?.Invoke(this, EventArgs.Empty);
