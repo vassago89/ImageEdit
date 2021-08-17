@@ -8,8 +8,10 @@ using System.Windows;
 
 namespace ImageEdit.Models
 {
+    [Serializable]
     abstract class Overlay : BindableBase
     {
+        [field:NonSerialized]
         private event EventHandler _rectChanged;
         public event EventHandler RectChanged
         {

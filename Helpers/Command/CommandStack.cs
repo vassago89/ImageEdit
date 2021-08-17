@@ -31,11 +31,13 @@ namespace ImageEdit.Helpers.Command
             _undoStack = new RoundStack<ICommand>(1000);
         }
 
-        public void Push(ICommand command)
+        public void Push(ICommand command, bool runRedo = true)
         {
             _redoStack.Clear();
 
-            command.Redo();
+            if (runRedo)
+                command.Redo();
+
             _undoStack.Push(command);
 
             Refresh();

@@ -46,6 +46,18 @@ namespace ImageEdit.Stores
             }
         }
 
+        private bool _isBlur;
+        public bool IsBlur
+        {
+            get => _isBlur;
+            set
+            {
+                SetProperty(ref _isBlur, value);
+                if (value)
+                    EditMode = EditMode.Blur;
+            }
+        }
+
         private EditMode _editMode;
         public EditMode EditMode
         {

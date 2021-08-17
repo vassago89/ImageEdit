@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace ImageEdit.Models
 {
+    [Serializable]
     class ResizeOverlay : ImageOverlay
     {
         public ResizeOverlay(Rect rect, BitmapSource source) : base(rect, source)

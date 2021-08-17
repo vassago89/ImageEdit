@@ -12,9 +12,11 @@ using System.Windows.Media.Imaging;
 
 namespace ImageEdit.Models
 {
+    [Serializable]
     class TextOverlay : Overlay
     {
         public string Text { get; set; }
+        [field:NonSerialized]
         public TextBox TextBox { get; set; }
 
         private string _foreground;
@@ -60,6 +62,7 @@ namespace ImageEdit.Models
             set => SetProperty(ref _textDecoration, value);
         }
 
+        [NonSerialized]
         private FontWeight _fontWeight;
         public FontWeight FontWeight
         {
@@ -81,12 +84,19 @@ namespace ImageEdit.Models
             set => SetProperty(ref _radius, value);
         }
 
+        [NonSerialized]
         public FontFamily _fontFamily;
         public FontFamily FontFamily
         {
             get => _fontFamily;
-            set => SetProperty(ref _fontFamily, value);
+            set
+            {
+                SetProperty(ref _fontFamily, value);
+                FontFamilyName = _fontFamily.Source;
+            }
         }
+
+        public string FontFamilyName { get; private set; }
 
         private bool _isAlignLeft;
         public bool IsAlignLeft
@@ -139,9 +149,10 @@ namespace ImageEdit.Models
             Foreground = "Black";
             Background = "Transparent";
             FontSize = 32;
-            FontFamily = Fonts.SystemFontFamilies.First(b => b.Source == "Arial");
-            FontWeight = FontWeights.Normal;
             TextDecoration = null;
+
+            FontWeight =  FontWeights.Normal;
+            FontFamily = Fonts.SystemFontFamilies.First(b => b.Source == "Arial");
         }
     }
 }

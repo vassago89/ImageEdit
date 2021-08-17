@@ -75,7 +75,7 @@ namespace ImageEdit.Algorithms
                 return null;
 
             var sub = source.SubMat(rect);
-            var resized = sub.Resize(new Size(20, 20));
+            var resized = sub.Resize(new Size(_resize, _resize));
             return resized.Resize(new Size(source.Width, source.Height));
         }
 

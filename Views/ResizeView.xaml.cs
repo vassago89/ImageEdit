@@ -159,7 +159,8 @@ namespace ImageEdit.Views
         {
             Mouse.OverrideCursor = Cursors.Arrow;
             _direction = Direction.None;
-            Border.Background = null;        }
+            Border.Background = null;     
+        }
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {

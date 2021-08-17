@@ -5,11 +5,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace ImageEdit.Helpers
 {
     [Serializable]
-    abstract class BindableBase : INotifyPropertyChanged
+    public abstract class BindableControl : UserControl, INotifyPropertyChanged
     {
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
@@ -24,7 +25,7 @@ namespace ImageEdit.Helpers
             return true;
         }
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) 
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

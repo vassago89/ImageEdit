@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace ImageEdit.Models
 {
+    [Serializable]
     class ImageOverlay : Overlay
     {
         private BitmapSource _source;

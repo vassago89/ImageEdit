@@ -30,6 +30,26 @@
         </Style>
     </UserControl.Resources>
     <Canvas>
+        <ItemsControl ItemsSource="{Binding OverlayStore.Backgrounds}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="{Binding Rect.Width}" Height="{Binding Rect.Height}">
+                        <Image Stretch="Fill" Source="{Binding Source}"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding Rect.X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Rect.Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
         <ItemsControl x:Name="Texts" ItemsSource="{Binding OverlayStore.Overlays}" ItemTemplateSelector="{StaticResource Selector}">
             <ItemsControl.Resources>
                 <DataTemplate  x:Key="Text" DataType="{x:Type models:TextOverlay}">
@@ -46,7 +66,8 @@
                                  Background="Transparent"
                                  BorderThickness="1"
                                  TextAlignment="{Binding Alignment}" 
-                                 VerticalContentAlignment="Center">
+                                 VerticalContentAlignment="Center"
+                                 AcceptsReturn="True">
                         </TextBox>
                     </Grid>
                 </DataTemplate>

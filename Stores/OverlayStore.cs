@@ -28,6 +28,13 @@ namespace ImageEdit.Stores
             remove => _textChanged -= value;
         }
 
+        private ObservableCollection<ImageOverlay> _backgrounds;
+        public ObservableCollection<ImageOverlay> Backgrounds
+        {
+            get => _backgrounds;
+            set => SetProperty(ref _backgrounds, value);
+        }
+
         private ObservableCollection<Overlay> _overlays;
         public ObservableCollection<Overlay> Overlays
         {
@@ -68,6 +75,7 @@ namespace ImageEdit.Stores
             private set => SetProperty(ref _isDeselected, value);
         }
 
+
         private Overlay _selected;
         public Overlay Selected
         {
@@ -94,6 +102,9 @@ namespace ImageEdit.Stores
         {
             _overlays = new ObservableCollection<Overlay>();
             BindingOperations.EnableCollectionSynchronization(_overlays, new object());
+
+            _backgrounds = new ObservableCollection<ImageOverlay>();
+            BindingOperations.EnableCollectionSynchronization(_backgrounds, new object());
 
             _overlays.CollectionChanged += _overlays_CollectionChanged;
         }

@@ -14,7 +14,7 @@ namespace ImageEdit.Helpers.Command
         void Redo();
         void Undo();
 
-        void Push(ICommand command);
+        void Push(ICommand command, bool runRedo = false);
         void Clear();
     }
 }

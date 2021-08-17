@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\Blur.cs" />
     <Compile Include="Algorithms\Erase.cs" />
     <Compile Include="Algorithms\GrabCut.cs" />
     <Compile Include="Algorithms\Mosaic.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Extensions\BitmapSourceExtensions.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Helpers\BindableBase.cs" />
+    <Compile Include="Helpers\BindableControl.cs" />
     <Compile Include="Helpers\BindingProxy.cs" />
     <Compile Include="Helpers\Command\Command.cs" />
     <Compile Include="Helpers\Command\CommandStack.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Stores\EditStore.cs" />
     <Compile Include="Stores\ImageStore.cs" />
     <Compile Include="Stores\OverlayStore.cs" />
+    <Compile Include="ViewModels\BlurViewModel.cs" />
     <Compile Include="ViewModels\ControlViewModel.cs" />
     <Compile Include="ViewModels\CropViewModel.cs" />
     <Compile Include="ViewModels\ImageControlViewModel.cs" />
@@ -149,6 +152,9 @@
     <Compile Include="ViewModels\TextViewModel.cs" />
     <Compile Include="Views\ControlView.xaml.cs">
       <DependentUpon>ControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BlurView.xaml.cs">
+      <DependentUpon>BlurView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CropView.xaml.cs">
       <DependentUpon>CropView.xaml</DependentUpon>
@@ -201,6 +207,10 @@
     <Page Include="Views\ControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BlurView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\CropView.xaml">
       <SubType>Designer</SubType>
