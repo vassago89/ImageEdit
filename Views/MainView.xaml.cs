@@ -189,7 +189,12 @@ namespace ImageEdit.Views
 
         private void Grid_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Delete)
+            if (e.Key == Key.Escape)
+            {
+                OverlayStore.Instance.Selected = null;
+                EditStore.Instance.IsNone = true;
+            }
+            else if (e.Key == Key.Delete)
             {
                 if (OverlayStore.Instance.Selected != null)
                 {

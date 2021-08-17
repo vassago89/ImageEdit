@@ -127,6 +127,25 @@ namespace ImageEdit.Stores
             target.Render(visual);
         }
 
+        private void Render(RenderTargetBitmap target, Canvas canvas, System.Windows.Rect targetRect, System.Windows.Rect sourceRect)
+        {
+            var brush = new VisualBrush(canvas);
+            brush.ViewboxUnits = BrushMappingMode.Absolute;
+            brush.Viewbox = sourceRect;
+
+            var visual = new DrawingVisual();
+            var drawingContext = visual.RenderOpen();
+
+            drawingContext.DrawRectangle(
+                brush,
+                null,
+                targetRect);
+
+            drawingContext.Close();
+
+            target.Render(visual);
+        }
+
         public System.Drawing.Bitmap Get()
         {
             if (_source == null || Image == null || Overlay == null)
@@ -143,14 +162,16 @@ namespace ImageEdit.Stores
             return bitmap.ToBitmap();
         }
 
-        public Mat GetMat()
+        public Mat GetMat(System.Windows.Rect targetRect, System.Windows.Rect sourceRect)
         {
             if (_source == null || Image == null || Overlay == null)
                 return null;
 
-            var bitmap = new RenderTargetBitmap((int)(_source.Width), (int)(_source.Height), _source.DpiX, _source.DpiY, PixelFormats.Pbgra32);
-            Render(bitmap, Image, new System.Windows.Rect(0, 0, _source.Width, _source.Height));
-            Render(bitmap, Overlay, OverlayStore.Instance.GetRegion());
+            //var bitmap = new RenderTargetBitmap((int)(_source.Width), (int)(_source.Height), _source.DpiX, _source.DpiY, PixelFormats.Pbgra32);
+            var bitmap = new RenderTargetBitmap((int)targetRect.Width, (int)targetRect.Height, _source.DpiX, _source.DpiY, PixelFormats.Pbgra32);
+            //var scaleRect = new System.Windows.Rect(rect.X * ZoomService.Scale, rect.Y * ZoomService.Scale, rect.Width * ZoomService.Scale, rect.Height * ZoomService.Scale);
+            Render(bitmap, Image, new System.Windows.Rect(0, 0, targetRect.Width, targetRect.Height), sourceRect);
+            Render(bitmap, Overlay, new System.Windows.Rect(0, 0, targetRect.Width, targetRect.Height), sourceRect);
 
             Mat result = new Mat();
             result.Create(bitmap.PixelHeight, bitmap.PixelWidth, MatType.CV_8UC4);

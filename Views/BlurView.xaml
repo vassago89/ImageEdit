@@ -12,7 +12,7 @@
     <UserControl.DataContext>
         <viewModels:BlurViewModel/>
     </UserControl.DataContext>
-    <Grid Background="Transparent" MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove" MouseLeave="Grid_MouseLeave" MouseUp="Grid_MouseUp">
+    <Grid x:Name="Grid" Background="Transparent" MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove" MouseLeave="Grid_MouseLeave" MouseUp="Grid_MouseUp">
         <Canvas x:Name="Canvas">
             <Canvas.RenderTransform>
                 <TransformGroup>
@@ -24,7 +24,7 @@
         </Canvas>
         <UniformGrid Columns="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4" Background="LightGray">
             <TextBlock Text="크기" VerticalAlignment="Center" FontSize="24"/>
-            <controls:NumericButton Value="{Binding Radius}" Max="25" Min="1" KeyDown="NumericButton_KeyDown"/>
+            <controls:NumericButton Value="{Binding Radius}" Max="50" Min="1" KeyDown="NumericButton_KeyDown"/>
         </UniformGrid>
     </Grid>
 </UserControl>

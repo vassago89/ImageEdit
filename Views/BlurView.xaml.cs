@@ -58,13 +58,17 @@ namespace ImageEdit.Views
 
             if (_isPressed)
             {
-                var processed = Algorithms.Algorithms.Blur(
-                    ImageStore.Instance.GetMat(), new OpenCvSharp.Rect((int)_viewModel.CurPos.X, (int)_viewModel.CurPos.Y, (int)_viewModel.Radius, (int)_viewModel.Radius));
+                var sourcePos = e.GetPosition(Grid);
+                var sourceRect = new Rect(sourcePos.X - _viewModel.Radius / 2, sourcePos.Y - _viewModel.Radius / 2, _viewModel.Radius, _viewModel.Radius);
+
+                var targetRect = new Rect(_viewModel.CurPos.X, _viewModel.CurPos.Y, _viewModel.Radius, _viewModel.Radius);
+                    var processed = Algorithms.Algorithms.Blur(
+                    ImageStore.Instance.GetMat(targetRect, sourceRect), new OpenCvSharp.Rect((int)_viewModel.CurPos.X, (int)_viewModel.CurPos.Y, (int)_viewModel.Radius, (int)_viewModel.Radius));
 
                 if (processed == null)
                     return;
 
-                var overlay = new ImageOverlay(new Rect(_viewModel.CurPos.X, _viewModel.CurPos.Y, _viewModel.Radius, _viewModel.Radius), processed.ToBitmapSource());
+                var overlay = new ImageOverlay(targetRect, processed.ToBitmapSource());
                 OverlayStore.Instance.Backgrounds.Add(overlay);
                 _curOverlays.Add(overlay);
             }
