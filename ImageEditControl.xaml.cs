@@ -32,7 +32,9 @@ namespace ImageEdit
             RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
             //이거 안하면 dll 복사가 안되서ㄴ... 수정할 부분
             var dllFont = FontAwesomeIcon.Font;
+            Console.WriteLine(dllFont);
             var dllToolkit = Xceed.Wpf.Toolkit.AllowedSpecialValues.Any;
+            Console.WriteLine(dllToolkit);
 
             InitializeComponent();
         }

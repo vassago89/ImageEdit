@@ -118,14 +118,18 @@ namespace ImageEdit.Stores
 
         public Rect GetRegion()
         {
-            if (_overlays.Count == 0)
+            var merged = new List<Overlay>();
+            merged.AddRange(_overlays);
+            merged.AddRange(_backgrounds);
+
+            if (merged.Count == 0)
                 return Rect.Empty;
 
-            var left = _overlays.Min(t => t.Rect.Left);
-            var right = _overlays.Max(t => t.Rect.Right);
+            var left = merged.Min(t => t.Rect.Left);
+            var right = merged.Max(t => t.Rect.Right);
 
-            var top = _overlays.Min(t => t.Rect.Top);
-            var bottom = _overlays.Max(t => t.Rect.Bottom);
+            var top = merged.Min(t => t.Rect.Top);
+            var bottom = merged.Max(t => t.Rect.Bottom);
 
             return new Rect(new Point(left, top), new Point(right, bottom));
         }

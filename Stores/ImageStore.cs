@@ -44,6 +44,7 @@ namespace ImageEdit.Stores
         {
             OverlayStore.Instance.Selected = null;
             OverlayStore.Instance.Overlays.Clear();
+            OverlayStore.Instance.Backgrounds.Clear();
             EditStore.Instance.Rect = System.Windows.Rect.Empty;
             EditStore.Instance.CommandStack.Clear();
 
@@ -59,6 +60,7 @@ namespace ImageEdit.Stores
         {
             OverlayStore.Instance.Selected = null;
             OverlayStore.Instance.Overlays.Clear();
+            OverlayStore.Instance.Backgrounds.Clear();
             EditStore.Instance.Rect = System.Windows.Rect.Empty;
             EditStore.Instance.CommandStack.Clear();
 
@@ -136,7 +138,8 @@ namespace ImageEdit.Stores
 
             OverlayStore.Instance.Selected = null;
             OverlayStore.Instance.Overlays.Clear();
-            
+            OverlayStore.Instance.Backgrounds.Clear();
+
             return bitmap.ToBitmap();
         }
 

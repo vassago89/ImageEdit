@@ -40,6 +40,8 @@ namespace ImageEdit.ViewModels
                 if (OverlayStore.Instance.Selected == null)
                     return;
 
+                EditStore.IsNone = true;
+
                 EditStore.Instance.CommandStack.Push(new Command<Overlay>(
                         OverlayStore.Instance.Selected,
                         overlay =>
@@ -66,6 +68,8 @@ namespace ImageEdit.ViewModels
 
             TextCommand = new RelayCommand(() =>
             {
+                EditStore.IsNone = true;
+
                 var size = Math.Min(ImageStore.Instance.Source.Width, ImageStore.Instance.Source.Height) / 4;
 
                 var sourceRect = new Rect(0, 0, ImageStore.Instance.Source.PixelWidth, ImageStore.Instance.Source.PixelHeight);
@@ -90,6 +94,8 @@ namespace ImageEdit.ViewModels
 
             MosaicCommand = new RelayCommand(() =>
             {
+                EditStore.IsNone = true;
+
                 var results = Algorithms.Algorithms.Mosaic(ImageStore.Instance.Mat);
                 var overlays = new List<ImageOverlay>();
 
