@@ -3,6 +3,7 @@ using ImageEdit.Helpers.Command;
 using ImageEdit.Models;
 using ImageEdit.Stores;
 using ImageEdit.ViewModels;
+using OpenCvSharp.Extensions;
 using OpenCvSharp.WpfExtensions;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace ImageEdit.Views
             if (_isPressed)
             {
                 var processed = Algorithms.Algorithms.Blur(
-                    ImageStore.Instance.Mat, new OpenCvSharp.Rect((int)_viewModel.CurPos.X, (int)_viewModel.CurPos.Y, (int)_viewModel.Radius, (int)_viewModel.Radius));
+                    ImageStore.Instance.GetMat(), new OpenCvSharp.Rect((int)_viewModel.CurPos.X, (int)_viewModel.CurPos.Y, (int)_viewModel.Radius, (int)_viewModel.Radius));
 
                 if (processed == null)
                     return;

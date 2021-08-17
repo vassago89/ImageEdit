@@ -27,6 +27,7 @@ namespace ImageEdit.Stores
                 {
                     EditMode = EditMode.None;
                     Opacity = 1;
+                    OverlayStore.Instance.Selected = null;
                 }
             }
         }
@@ -42,6 +43,7 @@ namespace ImageEdit.Stores
                 {
                     EditMode = EditMode.Crop;
                     Opacity = 0.25;
+                    OverlayStore.Instance.Selected = null;
                 }
             }
         }
@@ -54,7 +56,10 @@ namespace ImageEdit.Stores
             {
                 SetProperty(ref _isBlur, value);
                 if (value)
+                {
                     EditMode = EditMode.Blur;
+                    OverlayStore.Instance.Selected = null;
+                }
             }
         }
 
