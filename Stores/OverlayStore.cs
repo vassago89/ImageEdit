@@ -34,7 +34,6 @@ namespace ImageEdit.Stores
             get => _backgrounds;
             set => SetProperty(ref _backgrounds, value);
         }
-
         private ObservableCollection<Overlay> _overlays;
         public ObservableCollection<Overlay> Overlays
         {
@@ -74,7 +73,6 @@ namespace ImageEdit.Stores
             get => _isDeselected;
             private set => SetProperty(ref _isDeselected, value);
         }
-
 
         private Overlay _selected;
         public Overlay Selected

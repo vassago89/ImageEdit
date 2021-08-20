@@ -16,14 +16,13 @@ namespace ImageEdit.Algorithms
             //if (sourceRect.Contains(rect) == false)
             //    return null;
 
-            var size = new Size(rect.Width, rect.Height);
-            if (size.Width % 2 == 0)
-                size.Width--;
+            //var size = new Size(rect.Width, rect.Height);
+            if (source.Cols < 3 || source.Rows < 3)
+                return null;
 
-            if (size.Height % 2 == 0)
-                size.Height--;
+            source.SaveImage("source.bmp");
 
-            return source.GaussianBlur(size, 1.5);
+            return source.GaussianBlur(new Size(3, 3), 1);
         }
     }
 }

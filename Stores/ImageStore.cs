@@ -209,9 +209,10 @@ namespace ImageEdit.Stores
 
             //var bitmap = new RenderTargetBitmap((int)(_source.Width), (int)(_source.Height), _source.DpiX, _source.DpiY, PixelFormats.Pbgra32);
             var bitmap = new RenderTargetBitmap((int)targetRect.Width, (int)targetRect.Height, _source.DpiX, _source.DpiY, PixelFormats.Pbgra32);
-            //var scaleRect = new System.Windows.Rect(rect.X * ZoomService.Scale, rect.Y * ZoomService.Scale, rect.Width * ZoomService.Scale, rect.Height * ZoomService.Scale);
-            Render(bitmap, Image, new System.Windows.Rect(0, 0, targetRect.Width, targetRect.Height), sourceRect);
-            Render(bitmap, Overlay, new System.Windows.Rect(0, 0, targetRect.Width, targetRect.Height), sourceRect);
+            var scaleRect = new System.Windows.Rect(sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
+            
+            Render(bitmap, Image, new System.Windows.Rect(0, 0, targetRect.Width, targetRect.Height), scaleRect);
+            //Render(bitmap, Overlay, new System.Windows.Rect(0, 0, targetRect.Width, targetRect.Height), scaleRect);
 
             Mat result = new Mat();
             result.Create(bitmap.PixelHeight, bitmap.PixelWidth, MatType.CV_8UC4);

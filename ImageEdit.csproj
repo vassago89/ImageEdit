@@ -185,6 +185,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Algorithms\BG.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Algorithms\Face.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
