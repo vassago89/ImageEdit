@@ -56,6 +56,14 @@ namespace ImageEdit.Stores
             ZoomFit();
         }
 
+        internal void SetMat(Mat mat)
+        {
+            _mat = mat;
+            var source = mat.ToBitmapSource();
+            source.Freeze();
+            Source = source;
+        }
+
         public void Set(Uri url)
         {
             OverlayStore.Instance.Selected = null;
@@ -64,11 +72,27 @@ namespace ImageEdit.Stores
             EditStore.Instance.Rect = System.Windows.Rect.Empty;
             EditStore.Instance.CommandStack.Clear();
 
-            var source = new BitmapImage(url);
+            var source = (BitmapSource)new BitmapImage(url);
             if (source.IsDownloading)
             {
                 source.DownloadCompleted += (sender, e) =>
                 {
+                    if (source.DpiX != 96 || source.DpiY != 96)
+                    {
+                        int stride = source.PixelWidth * source.Format.BitsPerPixel;
+                        var data = new byte[stride * source.PixelHeight];
+                        source.CopyPixels(data, stride, 0);
+
+                        source = BitmapSource.Create(
+                            source.PixelWidth,
+                            source.PixelHeight,
+                            96, 96,
+                            source.Format, null,
+                            data,
+                            source.PixelWidth * source.Format.BitsPerPixel);
+                    }
+
+                    _mat = source.ToMat();
                     source.Freeze();
                     Source = source;
                     ZoomFit();
@@ -76,6 +100,22 @@ namespace ImageEdit.Stores
             }
             else
             {
+                if (source.DpiX != 96 || source.DpiY != 96)
+                {
+                    int stride = source.PixelWidth * source.Format.BitsPerPixel;
+                    var data = new byte[stride * source.PixelHeight];
+                    source.CopyPixels(data, stride, 0);
+
+                    source = BitmapSource.Create(
+                        source.PixelWidth,
+                        source.PixelHeight,
+                        96, 96,
+                        source.Format, null,
+                        data,
+                        source.PixelWidth * source.Format.BitsPerPixel);
+                }
+
+                _mat = source.ToMat();
                 source.Freeze();
                 Source = source;
                 ZoomFit();

@@ -34,7 +34,7 @@ namespace ImageEdit.Algorithms
         private static readonly int _resize = 20;
         private static readonly double _confidence = 0.5;
 
-        private static Net _net;
+        private static Net _faceNet;
 
         private static void InitilizeFace()
         {
@@ -51,7 +51,7 @@ namespace ImageEdit.Algorithms
             }
         }
 
-        private static Net Open()
+        private static Net OpenFace()
         {
             if (File.Exists(_faceFileName))
             {
@@ -62,7 +62,7 @@ namespace ImageEdit.Algorithms
                     return Net.ReadNetFromCaffe(dectectionFaceCaffe.Proto, dectectionFaceCaffe.Model);
                 }
             }
-
+            
             return null;
         }
 
@@ -84,11 +84,11 @@ namespace ImageEdit.Algorithms
             var rects = new List<Rect>();
 
             InitilizeFace();
-            if (_net == null)
+            if (_faceNet == null)
             {
-                _net = Open();
+                _faceNet = OpenFace();
 
-                if (_net == null)
+                if (_faceNet == null)
                     return rects;
             }
                 
@@ -96,8 +96,8 @@ namespace ImageEdit.Algorithms
             converted = converted.Resize(new Size(300, 300));
             using (var blob = CvDnn.BlobFromImage(converted, 1, new Size(300, 300), new Scalar(104.0, 177.0, 123.0)))
             {
-                _net.SetInput(blob);
-                using (var detection = _net.Forward())
+                _faceNet.SetInput(blob);
+                using (var detection = _faceNet.Forward())
                 {
                     using (var result = new Mat(detection.Size(2), detection.Size(3), MatType.CV_32F, detection.Ptr(0)))
                     {

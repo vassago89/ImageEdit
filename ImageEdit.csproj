@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\BackgroundRemoval.cs" />
     <Compile Include="Algorithms\Blur.cs" />
     <Compile Include="Algorithms\Erase.cs" />
     <Compile Include="Algorithms\GrabCut.cs" />

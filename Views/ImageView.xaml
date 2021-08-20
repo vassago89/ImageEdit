@@ -12,5 +12,7 @@
     </UserControl.DataContext>
     <Canvas>
         <Image Source="{Binding ImageStore.Source}"/>
+        <Image Source="{Binding ImageStore.Background}"/>
+        
     </Canvas>
 </UserControl>

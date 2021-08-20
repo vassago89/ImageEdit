@@ -86,6 +86,9 @@
                     <Button ToolTip="모자이크" Focusable="False" Command="{Binding MosaicCommand}">
                         <fa:FontAwesome Icon="Th"/>
                     </Button>
+                    <Button ToolTip="배경 제거" Focusable="False" Command="{Binding BGCommand}">
+                        <fa:FontAwesome Icon="Image"/>
+                    </Button>
                 </StackPanel>
                 <Border BorderBrush="Black" BorderThickness="1" Margin="0 4"/>
                 <StackPanel>

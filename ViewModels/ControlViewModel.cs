@@ -28,6 +28,7 @@ namespace ImageEdit.ViewModels
         public RelayCommand RemoveCommand { get; }
         public RelayCommand TextCommand { get; }
         public RelayCommand MosaicCommand { get; }
+        public RelayCommand BGCommand { get; }
 
         public ControlViewModel()
         {
@@ -90,6 +91,24 @@ namespace ImageEdit.ViewModels
                     }));
 
                 OverlayStore.Instance.Selected = overlay;
+            });
+
+            BGCommand = new RelayCommand(() =>
+            {
+                var result = Algorithms.Algorithms.BackgroundRemoval(ImageStore.Instance.Mat);
+                if (result != null)
+                {
+                    EditStore.CommandStack.Push(new Command<(OpenCvSharp.Mat prev, OpenCvSharp.Mat next)>(
+                    (ImageStore.Instance.Mat, result),
+                    t =>
+                    {
+                        ImageStore.Instance.SetMat(t.next);
+                    },
+                    t =>
+                    {
+                        ImageStore.Instance.SetMat(t.prev);
+                    }));
+                }
             });
 
             MosaicCommand = new RelayCommand(() =>
